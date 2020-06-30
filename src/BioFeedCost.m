@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     BENOPT-HEAT - Optimizing bioenergy use in the German heat sector 
-%     Copyright (C) 2017 - 2020 Matthias Jordan
+%     Copyright (C) 2015 - 2020 Markus Millinger, Matthias Jordan
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -21,14 +21,14 @@ function[BP]=BioFeedCost(time,bioprod,priceDevFactor,feedstockInputData,BioResid
 
     % %%%-------------DATA INPUT for energy crops
 
-    dieselCostStart           =   0.9; %€/l
-    labourCostStart           =   15; %€/h
-    wheatPriceStart           =   189;%(202 not inflation adjusted); %€/tFM - 5 year average between 14.04.2011-13.04.2016 - finanzen.net - daily values inflation adjusted with annual HICP data from Eurostat
+    dieselCostStart           =   0.9; %/l
+    labourCostStart           =   15; %/h
+    wheatPriceStart           =   189;%(202 not inflation adjusted); %/tFM - 5 year average between 14.04.2011-13.04.2016 - finanzen.net - daily values inflation adjusted with annual HICP data from Eurostat
     
     % Load data from FeedstockInputData
     numFeed                   =   size(feedstockInputData(1,:),2); % number of energy crops
 
-    feedDMcontent             =   feedstockInputData(1,1:numFeed); % Verhältnis Trockenmasse zu Frischmasse
+    feedDMcontent             =   feedstockInputData(1,1:numFeed); % Verhltnis Trockenmasse zu Frischmasse
     feedDMenergyContent       =   feedstockInputData(2,1:numFeed); %GJ/tDM
 
     feedYieldFMstartMedium    =   feedstockInputData(4,1:numFeed); % Yield
@@ -59,11 +59,11 @@ function[BP]=BioFeedCost(time,bioprod,priceDevFactor,feedstockInputData,BioResid
         feedYieldFM(t,:)=feedYieldFMstart+(t-1)*(feedYieldFMend-feedYieldFMstart)/(time-1);
         feedYieldDM(t,:)=feedYieldFM(t,:).*feedDMcontent;
         
-        % Calculation of labour and diesel cost for the complete timespan [€]
+        % Calculation of labour and diesel cost for the complete timespan []
         labourCost(t)=labourCostStart*priceDev(t);
         dieselCost(t)=dieselCostStart*priceDev(t);
  
-        % Calculation of Labour, Diesel, Machine Fix, Machine var, Direct costs [€/ha]
+        % Calculation of Labour, Diesel, Machine Fix, Machine var, Direct costs [/ha]
         feedLabourCostHa(t,:)=(feedLabourHaStart+(t-1)*(feedLabourHaEnd-feedLabourHaStart)/(time-1)).*labourCost(t);
         feedServiceHa(t,:)=(feedServiceStart+(t-1)*(feedServiceEnd-feedServiceStart)/(time-1));
         feedDieselHa(t,:)=(feedDieselHaStart+(t-1)*(feedDieselHaEnd-feedDieselHaStart)/(time-1));
@@ -75,22 +75,22 @@ function[BP]=BioFeedCost(time,bioprod,priceDevFactor,feedstockInputData,BioResid
         % Production cost per feed 
         feedExpensesHa(t,:)=feedLabourCostHa(t,:)+feedDieselCostHa(t,:)+feedMachineFixHa(t,:)+feedMachineVarHa(t,:)+feedDirectCostsHa(t,:)+feedServiceHa(t,:);
         
-        % Wheat income for each year [€/ha]
+        % Wheat income for each year [/ha]
         wheatIncome(t)=wheatPriceStart*feedYieldFM(t,7)*priceDev(t);
         
-        % Wheat Profit for each year [€/ha]
+        % Wheat Profit for each year [/ha]
         wheatProfit(t)=wheatIncome(t)-feedExpensesHa(t,7); % Achtung Weizen muss an Stelle 7 in der Excel Liste sein
         
-        % Feed Income [€/ha]
+        % Feed Income [/ha]
         feedIncomeHa(t,:)=feedExpensesHa(t,:)+wheatProfit(t);
         
-        % Feed Price [€/GJ]
+        % Feed Price [/GJ]
         feedPriceGJ(t,:)=(feedIncomeHa(t,:)./feedYieldDM(t,:))./feedDMenergyContent;
     end
 
 
     
- % Prizes for residues [€/GJ]
+ % Prizes for residues [/GJ]
     if Sen==0
         for b=1:9
             for t=1:time
