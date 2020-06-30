@@ -175,7 +175,7 @@ end
 toc
 
 
-%% Transfer paramter to GAMS and receive optimization results
+%% Transfer parameter to GAMS and receive optimization results
 tic
 disp('Optimization started');
 
@@ -215,7 +215,7 @@ clear vp vBiop vGasp v3p bup bcp ncapp ncap1p ncap2p nextp nprodp nxdecp tcp ghg
 
 
 % Display total costs in trillion EUR
-disp(['Total costs (Trillion €): ' num2str(tc/1000000000000)]);
+disp(['Total costs (Trillion ): ' num2str(tc/1000000000000)]);
 
 %% Save data
 
