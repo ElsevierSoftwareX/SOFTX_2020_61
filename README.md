@@ -1,12 +1,14 @@
-BENOPT-HEAT - Optimizing bioenergy use in the German heat sector
+#BENOPT-HEAT - Optimizing bioenergy use in the German heat sector
 
 The model was developed to identify the optimal use of biomass within the German heat sector. The heat sector is divided into 19 sub-sectors. For each sub-sector, a variety of representative bioenergy-, fossil- and other renewable (hybrid-) heat technology concepts are described, see data publication (https://data.mendeley.com/datasets/v2c93n28rj/2). Within scenarios, the optimal use of bioenergy is determined. A systematic uncertainty assessment can be conducted by applying a global sensitivity analysis. The model runs in Matlab and needs to be coupled with GAMS, where the actual optimization is conducted.
 
 Running scenarios:
+==================
 
 The model consists of a user interface and six main modules (five MATLAB functions and the optimization module in GAMS). With the user interface data can be imported from Excel files and stored in .mat files (xlsx2mat.m). In the user interface scenarios can be customized and executed. When the buttom "Optimize" is pushed, the main function is called, which calls all necessary functions to set the parameters (SetParamter.m), run the optimization module in GAMS (OptimizationModule.gms) and start the plotting of the results (Plotting.m). The optimization results can be saved and plotted later with the user interface.
 
 Running a global sensitivity analysis (Sobol'):
+===============================================
 
 Running a sensitivity analysis requires a model server grid or similar to execute the following steps:
 - Detemine the range of uncertainty (Sobol_ParameterRange.xlsx)
@@ -19,6 +21,7 @@ Running a sensitivity analysis requires a model server grid or similar to execut
 
 
 License:
+========
 
 
 BENOPT-HEAT - Optimizing bioenergy use in the German heat sector 
