@@ -1,0 +1,496 @@
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   2  *     BENOPT-HEAT - Optimizing bioenergy use in the German heat sector
+   3  *     Copyright (C) 2017 - 2020 Matthias Jordan
+   4  *
+   5  *     This program is free software: you can redistribute it and/or modify
+   6  *     it under the terms of the GNU General Public License as published by
+   7  *     the Free Software Foundation, either version 3 of the License, or
+   8  *     (at your option) any later version.
+   9  *
+  10  *     This program is distributed in the hope that it will be useful,
+  11  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  12  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  13  *     GNU General Public License for more details.
+  14  *
+  15  *     You should have received a copy of the GNU General Public License
+  16  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  17  *     contact: matthias.jordan@ufz.de
+  18  *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  19   
+  21   
+GDXIN   C:\Users\martinm\Documents\BENOPT-HEAT (public)\src\matdata.gdx
+  23   
+  24  sets
+  25   stat            Solve status /solvestat,modelstat/
+  26   
+  27   t               Time
+--- LOAD  t = 1:t
+  29   t2034(t)        Time before 2035 /1*20/
+  30   
+  31   i               Technologies
+--- LOAD  i = 2:i
+  33   i2034(i)        Technologies that do not use poplar pellets before 2035 /18,19,20/
+  34   ihp(i)          Heat pump technologies /7*12,19,22,27,32,35/
+  35   
+  36   m               Plantmodules
+--- LOAD  m = 3:m
+  38   
+  39   j               Markets referring to sub-sectors
+--- LOAD  j = 4:j
+  41   jclus(j)        Markets with sub-clusters /1*5/
+  42   
+  43   c               Clusters
+--- LOAD  c = 5:c
+  45   
+  46   bm              Biotype
+--- LOAD  bm = 6:bm
+  48   bmwaste(bm)     Biotype residues /1*11/
+  49   
+  50   b               Bioproduct
+--- LOAD  b = 7:b
+  52   bwaste(b)       Bioproduct residues /1*9/
+  53   bcult(b)        Bioproduct cultivation /10*23/
+  54   bkup(b)         SRC products /12*14/
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+  55   bmis(b)         Miscanthus products /15*17/
+  56   bwoodchip(b)    Wood chip products (for waste2energy equation) /1,4,5,12,15/
+  57   bwoodchip2(b)   Wood chip products (for HHSCoal equation) /1,4,5,12/
+  58   bfire(b)        Firewood and briquette products /2,7,13,16/
+  59   bculst(b)       cultivated biomass products that are used in 2015 /10,11,18,19,21*23/
+  60   bScheit(b)      Biomass products used for log wood boiler /2,7,13/
+  61   bGas(b)         Biogas products used for GasTech /8*11,18*24/
+  62   
+  63   MT(i,j)         Technologies used on markets
+--- LOAD  MT = 9:MT
+  65   
+  66   TB(i,b)         Bioproducts used in technologies
+--- LOAD  TB = 8:TB
+  68   
+  69   BB(bm,b)        Biotypes used in bioproducts
+--- LOAD  BB = 10:BB
+  71   
+  72  ;
+  73   
+  74  parameters
+  75   vc(t,i,j,b)     Variable costs [EUR:GJ]
+  76   inv(t,i,m,j)    Investment cost per plant [EUR]
+  77   pmBio(t,i,j)    biomass share per technology [%]
+  78   pmGas(t,i,j)    gas_coal share per technology [%]
+  79   pm3(t,i,j)      non biomass_gas_coal share per technology [%]
+  80   efBio(t,i,j)    Conversion efficiency solid biomass
+  81   efGas(t,i,j)    Conversion efficiency gas_biogas
+  82   efMethan(t,b)   Conversion efficiency for the "biomethaneinspeiseanlage"
+  83   life(i,m,j)     lifetime of heating system [a]
+  84   ba(t,bm)        Available biomass from residues (bmwaste) [GJ] and available land for cultivation [ha]
+  85   bamaxw(t)       Maximal allowed biomass usage from waste ba [%]
+  86   bamaxc(t)       Maximal allowed biomass usage from cultivation ba [%]
+  87   yield(t,b)      Yield of cultivation products [GJ:ha]
+  88   ghgr(t,i,j)     GHG emission per technology [t:GJ]
+  89   ghgfeed(b)      GHG emissions per bioproduct [t:GJ]
+  90   alloc(i,j)      Allocation factor of emissions to heat sector
+  91   ghgmax(t)       GHG emission target [t]
+  92   d(t,j)          Heat demand [GJ]
+  93   dcap(t,j)       Heat demand per house or HS [GJ]
+  94   nstart(i,j)     Initial stock of HS
+  95   nsdec(t,i,m,j)  Yearly decrease of initial stock of HS
+  96   culstart(b)     Crop cultivation portfolio in the first 5 years
+  97   vcBeh(t,i,j,c)  Intangible variable costs [EUR:GJ]
+  98   invBeh(t,i,j,c) Intangible investment costs [EUR]
+  99   dBeh(t,j,c)     Demand in the clusters [GJ]
+ 100   
+ 101  * definition of parameters for the export (equal the variables)
+ 102   vp(t,i,j)        Heat production [GJ]
+ 103   vBiop(t,i,j,b)   Solid Biomass heat production [GJ]
+ 104   vGasp(t,i,j,b)   gas_biogas_coal heat production [GJ]
+ 105   v3p(t,i,j)       Non-Biomass heat production [GJ]
+ 106   bup(t,b,bm)      Actual converted biomass from biotype to bioprod [GJ]
+ 107   bcp(t,i,j,b)     Actual consumed biomass in the technology [GJ]
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+ 108   ghgfp(t,i,j,b)   Actual feedstock GHG emissions [t]
+ 109   ghgtp(t,i,j)     Actual technology GHG emissions [t]
+ 110   nprodp(t,i,j)    Number of HS producing heat
+ 111   ncapp(t,i,m,j)   Number of existing HS per technology (Capacity)
+ 112   ncap1p(t,i,m,j)  Number of existing HS used for production
+ 113   ncap2p(t,i,m,j)  Overcapacity of existing HS [number of HS]
+ 114   nextp(t,i,m,j)   Number of heating systems\modules extended
+ 115   nxdecp(t,i,m,j)  Number of HS of next that reach their lifetime
+ 116   vBehp(t,i,j,c)   Heat production in the clusters [GJ]
+ 117   tcp              Total system costs [EUR]
+ 118   returnStat(stat);
+ 119  ;
+ 120   
+--- LOAD  d = 11:d
+--- LOAD  dcap = 12:dcap
+--- LOAD  vc = 13:vc
+--- LOAD  inv = 14:inv
+--- LOAD  pmBio = 15:pmBio
+--- LOAD  pmGas = 16:pmGas
+--- LOAD  pm3 = 17:pm3
+--- LOAD  efBio = 18:efBio
+--- LOAD  efGas = 19:efGas
+--- LOAD  efMethan = 20:efMethan
+--- LOAD  life = 21:life
+--- LOAD  ba = 22:ba
+--- LOAD  bamaxw = 23:bamaxw
+--- LOAD  bamaxc = 24:bamaxc
+--- LOAD  nstart = 25:nstart
+--- LOAD  nsdec = 26:nsdec
+--- LOAD  yield = 27:yield
+--- LOAD  culstart = 28:culstart
+--- LOAD  ghgr = 29:ghgr
+--- LOAD  ghgfeed = 30:ghgfeed
+--- LOAD  alloc = 31:alloc
+--- LOAD  ghgmax = 32:ghgmax
+--- LOAD  vcBeh = 34:vcBeh
+--- LOAD  invBeh = 35:invBeh
+--- LOAD  dBeh = 33:dBeh
+ 122   
+ 123  free variable
+ 124   tc              Total costs [EUR]
+ 125   ghgtot          GHG total emission [t]
+ 126  ;
+ 127   
+ 128  positive variables
+ 129   v(t,i,j)        Heat production [GJ]
+ 130   vBio(t,i,j,b)   Solid biomass heat production [GJ]
+ 131   vGas(t,i,j,b)   Gas_biogas_coal heat production [GJ]
+ 132   v3(t,i,j)       Non-Biomass heat production [GJ]
+ 133   bu(t,b,bm)      Actual converted biomass from biotype to bioprod [GJ]
+ 134   bc(t,i,j,b)     Actual consumed biomass in the technology [GJ]
+ 135   ghgf(t,i,j,b)   Actual feedstock GHG emissions [t]
+ 136   ghgt(t,i,j)     Actual technology GHG emissions [t]
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+ 137   nprod(t,i,j)    Number of HS producing heat
+ 138   ncap(t,i,m,j)   Number of existing HS per technology (Capacity)
+ 139   ncap1(t,i,m,j)  Number of existing HS used for production
+ 140   ncap2(t,i,m,j)  Overcapacity of existing HS
+ 141   next(t,i,m,j)   Number of heating systems\modules extended
+ 142   ndec(t,i,m,j)   Sum of all HS reductions
+ 143   nxdec(t,i,m,j)  Number of HS of next that reach their lifetime
+ 144   nprodBeh(t,i,j,c)  Number of HS producing heat in the clusters
+ 145   vBeh(t,i,j,c)      Heat production in the clusters [GJ]
+ 146  ;
+ 147   
+ 148  *fixed values for starting year
+ 149  ncap2.fx("1",i,m,j)=0;
+ 150  next.fx("1",i,m,j)=0;
+ 151  ndec.fx("1",i,m,j)=0;
+ 152  nxdec.fx("1",i,m,j)=0;
+ 153   
+ 154  *forbids certain technologies on certain markets
+ 155  v.fx(t,i,j) $ (not MT(i,j))=0;
+ 156   
+ 157  *forbids certain technologies to use certain biomass products
+ 158  bc.fx(t,i,j,b) $ (not TB(i,b))=0;
+ 159  bc.fx(t2034,i2034,j,"14")=0;
+ 160   
+ 161  *forbids certain bioproducts to use certain biomass types
+ 162  bu.fx(t,b,bm) $ (not BB(bm,b))=0;
+ 163   
+ 164  *number of plants in starting year
+ 165  ncap1.fx("1",i,m,j)=nstart(i,j);
+ 166   
+ 167  *sets MllHKW constant
+ 168  nprod.fx(t,"28","15")=nstart("28","15");
+ 169   
+ 170  *sets Leach boiler constant
+ 171  nprod.fx(t,"48","16")=nstart("48","16");
+ 172   
+ 173  *During the decrease of the initial stock, overcapacity is forbidden; despite in district heating market (i=24) and market 14 in the 95% case
+ 174  ncap2.fx(t,i,"1",j) $ (ord(t)<=life(i,"1",j)+1 and not ord(i)=24 and not ord(j)=14)=0;
+ 175   
+ 176  *overcapacity only allowed for gas boiler/coal...
+ 177  ncap2.fx(t,i,"1",j) $ (not ord(i)=1 and not ord(i)=24  and not ord(i)=25  and not ord(i)=30  and not ord(i)=36 and not ord(i)=40  and not ord(i)=46)=0;
+ 178   
+ 179  *Sets nxdec=0 before any lifetime reduction of next happens
+ 180  nxdec.fx(t,i,m,j) $ (ord(t)<=(life(i,m,j)))=0;
+ 181   
+ 182  equations
+ 183   
+ 184  totcostfct       Total costs over all years  = Sum of invest + variable total costs  (objective)
+ 185  totghgfct        GHG total emission (objective)
+ 186   
+ 187  demandfct        Heat demand per market = sum of heat consumption per market
+ 188  dcapfct          This equation is supposed to tell that one HS is exactly for one house
+ 189   
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+ 190  nfct             capacity of heating systems in t+1 = capacity in t + next in t+1 - ndec in t+1
+ 191   
+ 192  ncapfct          Total capacity = capacity used + overcapacity
+ 193  ncap2fct         Overcapacity = total capacity - production capacity
+ 194  ncap3fct         HS in overcapacity cannot be reused for production
+ 195  ncap2ctrl1       Yearly overcapacity is limited to XX%
+ 196   
+ 197  ndecfct          defines all ndecs
+ 198  nxdec1fct        Defines nxdec in relation to next
+ 199   
+ 200  nocfct           allowes number of producing HS to be smaller than number of capacity HS (overcapacity for secondary modules possible) also defines minimum number of all modules
+ 201  n1fct            Forbids over capacity of modul 1 of ncap1
+ 202  mbioprodfct      Definition of maximum solid biomass production per technology
+ 203  mgasprodfct      Definition of maximum gas_biogas_coal production per technology
+ 204  m3prodfct        Definition of maximum non-biomass production per technology
+ 205  mprodsumfct      Total heat production = biomass production + non biomass production
+ 206   
+ 207  bcfct            Consumed biomass = heat consumption divided by degree of efficiency
+ 208  bcGasScheit      Technology GasBW+ScheitO can use different biomass products for different components. This equation regulates this issue
+ 209  bcWaste2Energy   Technology MllHKW+HHS-Kessel can use different biomass products for different components. This equation regulates this issue
+ 210  bcHHSCoal        Technology HHSCoal can use different biomass products for different components. This equation regulates this issue
+ 211  bamaxwastefct    Consumed biomass of residues is limited to a certain degree of percentage
+ 212  ba1fct           Which residue biomass types can be used for which biomass products
+ 213  ba2fct           Limitation of energy crops land potential to biomass products
+ 214  ba3fct           Which fossil biomass types can be used for which biomass products
+ 215   
+ 216  bufct            Produced amount biomass products = sum of consumed biomass per technologies
+ 217   
+ 218  bustart          set portfolio of energy crops in starting years
+ 219  bustartKup       set portfolio of KUP in starting years
+ 220  bustartMis       set portfolio of Miscanthus in the starting years
+ 221  bumax            max increase of energy crops
+ 222  bumaxKup         max increase of KUP
+ 223  bumaxMis         max increase of miscanthus
+ 224   
+ 225  ghgffct          feedstock GHG abatement per technology
+ 226  ghgtfct          technology GHG abatement per technology
+ 227  ghgmaxfct        GHG emission target >= yearly total GHG emission _ if ghgmax(1)==0 --> no target is set
+ 228   
+ 229  vBehfct1         Demand in clusters equals production in clusters
+ 230  vBehfct2         Sum of production in clusters equals the production in markets
+ 231  nprodBehfct1     Number of HS in clusters * Dcap equals production in clusters
+ 232  nprodBehfct2     Sum of number of HS in clusters equals the numer of HS in market
+ 233  ;
+ 234   
+ 235  * Objective function minimizing costs
+ 236  totcostfct..             tc=e=sum((t,i,j),vc(t,i,j,"1")*v3(t,i,j))+sum((t,i,j,b),vc(t,i,j,b)*vBio(t,i,j,b))+sum((t,i,j,b),vc(t,i,j,b)*vGas(t,i,j,b))+sum((t,i,m,j),ncap(t,i,m,j)*inv(t,i,m,j))+sum((t,i,j,c),vcBeh(t,i,j,c)*vBeh(t,i,j,c))+sum((t,i,j,c),
+      invBeh(t,i,j,c)*nprodBeh(t,i,j,c));
+ 237   
+ 238  *Alternate Objective funtion minimizing GHG emissions
+ 239  totghgfct..              ghgtot=e=sum((t,i,j,b),ghgf(t,i,j,b))+sum((t,i,j),ghgt(t,i,j));
+ 240   
+ 241  * Restrictions
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+ 242  demandfct(t,j)..                                                 d(t,j)=e=sum((i),v(t,i,j));
+ 243  dcapfct(t,j)..                                                   d(t,j)=e=sum(i,nprod(t,i,j))*dcap(t,j);
+ 244   
+ 245  nfct(t+1,i,m,j) $ (ord(t)<36)..                                  ncap(t+1,i,m,j)=e=ncap(t,i,m,j)+next(t+1,i,m,j)-ndec(t+1,i,m,j);
+ 246   
+ 247  ncapfct(t,i,m,j)..                                               ncap(t,i,m,j)=e=ncap1(t,i,m,j)+ncap2(t,i,m,j);
+ 248  ncap2fct(t,i,m,j) $ (ord(t)>1)..                                 ncap2(t,i,m,j)=e=ncap(t,i,m,j)-nprod(t,i,j);
+ 249  ncap3fct(t+1,i,j) $ (ord(t)<36)..                                ncap2(t+1,i,"1",j)=g=ncap2(t,i,"1",j)-nsdec(t+1,i,"1",j)-nxdec(t+1,i,"1",j);
+ 250  ncap2ctrl1(t)..                                                  sum((i,j),ncap2(t,i,"1",j))=l=0.01*sum((i,j),nprod(t,i,j));
+ 251   
+ 252  ndecfct(t,i,m,j) $ (ord(t)>1)..                                  ndec(t,i,m,j)=e=nsdec(t,i,m,j)+nxdec(t,i,m,j);
+ 253  nxdec1fct(t,i,m,j) $ (ord(t)+life(i,m,j)<37) ..                  nxdec(t+life(i,m,j),i,m,j)=e=next(t,i,m,j);
+ 254   
+ 255  nocfct(t,i,m,j)..                                                nprod(t,i,j)=l=ncap1(t,i,m,j);
+ 256  n1fct(t,i,m,j)..                                                 nprod(t,i,j)=e=ncap1(t,i,"1",j);
+ 257  mbioprodfct(t,i,j)..                                             nprod(t,i,j)*pmBio(t,i,j)*dcap(t,j)=e=sum(b,vBio(t,i,j,b));
+ 258  mgasprodfct(t,i,j)..                                             nprod(t,i,j)*pmGas(t,i,j)*dcap(t,j)=e=sum(b,vGas(t,i,j,b));
+ 259  m3prodfct(t,i,j)..                                               nprod(t,i,j)*pm3(t,i,j)*dcap(t,j)=e=v3(t,i,j);
+ 260  mprodsumfct(t,i,j)..                                             v(t,i,j)=e=sum(b,vBio(t,i,j,b))+sum(b,vGas(t,i,j,b))+v3(t,i,j);
+ 261   
+ 262  bcfct(t,i,j,b)..                                                 bc(t,i,j,b)=e=vBio(t,i,j,b)/efBio(t,i,j)+vGas(t,i,j,b)/(efGas(t,i,j)*efMethan(t,b));
+ 263  bcGasScheit(t,j)..                                               sum(b,bc(t,"2",j,b))=e=sum(bGas,vGas(t,"2",j,bGas)/(efGas(t,"2",j)*efMethan(t,bGas)))+sum(bScheit,vBio(t,"2",j,bScheit))/efBio(t,"2",j);
+ 264  bcWaste2Energy(t,j)..                                            sum(b,bc(t,"28",j,b))=e=vGas(t,"28",j,"26")/efGas(t,"28",j)+sum(bwoodchip,vBio(t,"28",j,bwoodchip))/efBio(t,"28",j);
+ 265  bcHHSCoal(t,j)..                                                 sum(b,bc(t,"26",j,b))=e=vGas(t,"26",j,"25")/efGas(t,"26",j)+sum(bwoodchip2,vBio(t,"26",j,bwoodchip2))/efBio(t,"26",j);
+ 266  bamaxwastefct(t)..                                               sum(bmwaste(bm),ba(t,bm))*bamaxw(t)=g=sum((i,j,bwaste(b)),bc(t,i,j,b));
+ 267   
+ 268  ba1fct(t,bmwaste)..                                              ba(t,bmwaste)=g=sum(b,bu(t,b,bmwaste));
+ 269  ba2fct(t)..                                                      ba(t,"12")*bamaxc(t)=g=sum(bcult(b),bu(t,b,"12")/yield(t,b));
+ 270  ba3fct(t)..                                                      ba(t,"13")=g=sum(b,bu(t,b,"13"));
+ 271   
+ 272  bufct(t,b)..                                                     sum(bm,bu(t,b,bm))=e=sum((i,j),bc(t,i,j,b));
+ 273   
+ 274  bustart(bculst)..                                                bu("1",bculst,"12")=e=yield("1",bculst)*culstart(bculst);
+ 275  bustartKup..                                                     sum((bkup,bm),bu("1",bkup,bm))=e=yield("1","12")*culstart("12");
+ 276  bustartMis..                                                     sum((bmis,bm),bu("1",bmis,bm))=e=yield("1","15")*culstart("15");
+ 277  bumax(t+1,bculst) $ (ord(t)<36)..                                bu(t+1,bculst,"12")=l=2*bu(t,bculst,"12");
+ 278  bumaxKup(t+1) $ (ord(t)<36)..                                    sum(bkup,bu(t+1,bkup,"12"))=l=2*sum(bkup,bu(t,bkup,"12"));
+ 279  bumaxMis(t+1) $ (ord(t)<36)..                                    sum(bmis,bu(t+1,bmis,"12"))=l=2*sum(bmis,bu(t,bmis,"12"));
+ 280   
+ 281  ghgffct(t,i,j,b)..                                               ghgf(t,i,j,b)=e=alloc(i,j)*ghgfeed(b)*bc(t,i,j,b);
+ 282  ghgtfct(t,i,j)..                                                 ghgt(t,i,j)=e=alloc(i,j)*ghgr(t,i,j)*v(t,i,j);
+ 283  ghgmaxfct(t) $(ghgmax("1")>0) ..                                 ghgmax(t)=g=sum((i,j,b),ghgf(t,i,j,b))+sum((i,j),ghgt(t,i,j));
+ 284   
+ 285  vBehfct1(t,jclus,c) $(dBeh("1","1","1")>0) ..                    dBeh(t,jclus,c)=e=sum(i,vBeh(t,i,jclus,c));
+ 286  vBehfct2(t,i,jclus) $(dBeh("1","1","1")>0) ..                    sum(c,vBeh(t,i,jclus,c))=e=v(t,i,jclus);
+ 287  nprodBehfct1(t,i,jclus,c) $(dBeh("1","1","1")>0) ..              nprodBeh(t,i,jclus,c)*dcap(t,jclus)=e=vBeh(t,i,jclus,c);
+ 288  nprodBehfct2(t,i,jclus) $(dBeh("1","1","1")>0) ..                sum(c,nprodBeh(t,i,jclus,c))=e=nprod(t,i,jclus);
+ 289   
+ 290   
+ 291   
+ 292   
+ 293  model BensimHeat /all/;
+ 294   
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+ 295  option LP=cplex;
+ 296  *option MINLP=CBC;
+ 297  *option MIP=cplex;
+ 298  *option MIP=CBC;
+ 299   
+ 300  *this option terminates the solver after X seconds
+ 301  option Reslim=45000;
+ 302   
+ 303  *This option can reduce or track runtime (model generation?)
+ 304  *option profile=1;
+ 305   
+ 306  *option threads=4;
+ 307   
+ 308  *turning off scaling
+ 309  * this creates a option file on the fly
+ 310  *$onecho > cplex.opt
+ 311  *scaind=-1
+ 312  *$offecho
+ 313  * this tells GAMS to use the option file
+ 314  *benopt.optfile=1;
+ 315   
+ 316  *specifying a smaller integrality tolerance
+ 317  *option epint=1e-005;
+ 318   
+ 319  *but in cases where the parameter NumericalEmphasis is turned on, CPLEX computes MIP kappa for a sample of subproblems
+ 320  *option numericalemphasis=1;
+ 321   
+ 322  * With these options all the information is not stored in the list file
+ 323  option limrow = 0;
+ 324  option limcol = 0;
+ 325  option solprint = off;
+ 326   
+ 327  * Define the objective function and solve
+ 328  solve BensimHeat minimizing tc using LP;
+ 329   
+ 330  returnStat('solvestat') = BensimHeat.solvestat;
+ 331  returnStat('modelstat') = BensimHeat.modelstat;
+ 332   
+ 333  * save results in parameter for indexed GDX file transfer
+ 334  vp(t,i,j) = v.l(t,i,j);
+ 335  vBiop(t,i,j,b) = vBio.l(t,i,j,b);
+ 336  vGasp(t,i,j,b) = vGas.l(t,i,j,b);
+ 337  v3p(t,i,j) = v3.l(t,i,j);
+ 338  bup(t,b,bm) = bu.l(t,b,bm);
+ 339  bcp(t,i,j,b) = bc.l(t,i,j,b);
+ 340  ghgfp(t,i,j,b) = ghgf.l(t,i,j,b);
+ 341  ghgtp(t,i,j) = ghgt.l(t,i,j);
+ 342  nprodp(t,i,j) = nprod.l(t,i,j);
+ 343  ncapp(t,i,m,j) = ncap.l(t,i,m,j);
+ 344  ncap1p(t,i,m,j) = ncap1.l(t,i,m,j);
+ 345  ncap2p(t,i,m,j) = ncap2.l(t,i,m,j);
+ 346  nextp(t,i,m,j) = next.l(t,i,m,j);
+ 347  nxdecp(t,i,m,j) = nxdec.l(t,i,m,j);
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 8
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+ 348  vBehp(t,i,j,c) = vBeh.l(t,i,j,c);
+ 349  tcp = tc.l;
+ 350   
+ 351  execute_unload 'matsol.gdx', returnstat ;
+ 352  execute_unloadIdx 'idxdata', vp, vBiop, vGasp, v3p, ghgfp, ghgtp, bup, bcp, ncapp, ncap1p, ncap2p, nextp, nprodp, nxdecp, vBehp, tcp;
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 9
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Include File Summary
+
+
+   SEQ   GLOBAL TYPE      PARENT   LOCAL  FILENAME
+
+     1        1 INPUT          0       0  C:\Users\martinm\Documents\BENOPT-HEAT (public)\src\OptimizationModule.gms
+     2       22 GDXIN          1      22  C:\Users\martinm\Documents\BENOPT-HEAT (public)\src\matdata.gdx
+
+
+COMPILATION TIME     =        0.047 SECONDS     13 MB  28.2.0 r750fa45 WEX-WEI
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                              07/06/20 11:11:08 Page 10
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE BensimHeat Using LP From line 328
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS          39     SINGLE EQUATIONS    3,319,098
+BLOCKS OF VARIABLES          19     SINGLE VARIABLES    4,970,182
+NON ZERO ELEMENTS    15,171,105
+
+
+GENERATION TIME      =       15.750 SECONDS  1,510 MB  28.2.0 r750fa45 WEX-WEI
+
+
+EXECUTION TIME       =       15.937 SECONDS  1,510 MB  28.2.0 r750fa45 WEX-WEI
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                              07/06/20 11:11:08 Page 11
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE BensimHeat Using LP From line 328
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   BensimHeat          OBJECTIVE  tc
+     TYPE    LP                  DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  328
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE    3485625353117.8857
+
+ RESOURCE USAGE, LIMIT         41.578     45000.000
+ ITERATION COUNT, LIMIT     33897    2000000000
+
+IBM ILOG CPLEX   28.2.0 r750fa45 Released Aug 19, 2019 WEI x86 64bit/MS Window
+--- GAMS/Cplex licensed for continuous and discrete problems.
+Cplex 12.9.0.0
+
+Space for names approximately 199.31 Mb
+Use option 'names no' to turn use of names off
+LP status(1): optimal
+Cplex Time: 30.11sec (det. 13171.01 ticks)
+Optimal solution found.
+Objective : 3485625353117.885742
+
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+                         11590  PROJECTED
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                              07/06/20 11:11:08 Page 12
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+EXECUTION TIME       =        1.406 SECONDS    628 MB  28.2.0 r750fa45 WEX-WEI
+
+
+USER: Small MUD - 5 User License                     S191010/0001AO-WIN
+      Helmholtz-Zentrum fuer Umweltforschung GmbH - UFZ, BioenerDC15197
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\martinm\Documents\BENOPT-HEAT (public)\src\OptimizationModule.gms
+Output     C:\Users\martinm\Documents\BENOPT-HEAT (public)\src\OptimizationModule.lst

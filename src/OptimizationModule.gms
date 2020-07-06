@@ -72,8 +72,8 @@ $loadR BB
 ;
 
 parameters
- vc(t,i,j,b)     Variable costs [:GJ]
- inv(t,i,m,j)    Investment cost per plant []
+ vc(t,i,j,b)     Variable costs [EUR:GJ]
+ inv(t,i,m,j)    Investment cost per plant [EUR]
  pmBio(t,i,j)    biomass share per technology [%]
  pmGas(t,i,j)    gas_coal share per technology [%]
  pm3(t,i,j)      non biomass_gas_coal share per technology [%]
@@ -81,7 +81,7 @@ parameters
  efGas(t,i,j)    Conversion efficiency gas_biogas
  efMethan(t,b)   Conversion efficiency for the "biomethaneinspeiseanlage"
  life(i,m,j)     lifetime of heating system [a]
- ba(t,bm)        Available biomass [GJ and ha]
+ ba(t,bm)        Available biomass from residues (bmwaste) [GJ] and available land for cultivation [ha]
  bamaxw(t)       Maximal allowed biomass usage from waste ba [%]
  bamaxc(t)       Maximal allowed biomass usage from cultivation ba [%]
  yield(t,b)      Yield of cultivation products [GJ:ha]
@@ -94,9 +94,9 @@ parameters
  nstart(i,j)     Initial stock of HS
  nsdec(t,i,m,j)  Yearly decrease of initial stock of HS
  culstart(b)     Crop cultivation portfolio in the first 5 years
- vcBeh(t,i,j,c)  Intangible variable costs [:GJ]
- invBeh(t,i,j,c) Intangible investment costs []
- dBeh(t,j,c)     Demand in the clusters
+ vcBeh(t,i,j,c)  Intangible variable costs [EUR:GJ]
+ invBeh(t,i,j,c) Intangible investment costs [EUR]
+ dBeh(t,j,c)     Demand in the clusters [GJ]
 
 * definition of parameters for the export (equal the variables)
  vp(t,i,j)        Heat production [GJ]
@@ -110,18 +110,18 @@ parameters
  nprodp(t,i,j)    Number of HS producing heat
  ncapp(t,i,m,j)   Number of existing HS per technology (Capacity)
  ncap1p(t,i,m,j)  Number of existing HS used for production
- ncap2p(t,i,m,j)  Overcapacity of existing HS
+ ncap2p(t,i,m,j)  Overcapacity of existing HS [number of HS]
  nextp(t,i,m,j)   Number of heating systems\modules extended
  nxdecp(t,i,m,j)  Number of HS of next that reach their lifetime
  vBehp(t,i,j,c)   Heat production in the clusters [GJ]
- tcp
+ tcp              Total system costs [EUR]
  returnStat(stat);
 ;
 
 $loadR d, dcap, vc, inv, pmBio, pmGas, pm3, efBio, efGas, efMethan , life, ba, bamaxw, bamaxc, nstart, nsdec, yield, culstart, ghgr, ghgfeed, alloc, ghgmax, vcBeh, invBeh, dBeh
 
 free variable
- tc              Total costs []
+ tc              Total costs [EUR]
  ghgtot          GHG total emission [t]
 ;
 

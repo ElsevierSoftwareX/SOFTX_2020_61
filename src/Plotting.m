@@ -441,7 +441,7 @@ if fig6==1
     ax.XTick = 1:5:36;
     ax.XTickLabel=2015:5:2050;
     ax.FontSize=FT(4);
-    title('Biomasseverteilung nach Technologien','FontSize',FT(1));
+    title('Biomass distribution in the technologies','FontSize',FT(1));
     ylabel(ylabbiomass,'FontSize',FT(2));
     legend(h(end:-1:1),legtech(end:-1:1),'Location','bestoutside','FontSize',FT(3));
 end

@@ -43,15 +43,15 @@ disp('Pre-calculations started');
 %% Define Sets
 
 load('SetList.mat');
-time = 36;  % t
-tech = find(cellfun(@isempty,SetList.textdata.SetList(:,1))==1,1)-2; % i
-techtype = find(cellfun(@isempty,SetList.textdata.SetList(:,9))==1,1)-2;  % tt
-modul = find(cellfun(@isempty,SetList.textdata.SetList(:,5))==1,1)-2;  % m 
+time = 36;  % t - time / number of years
+tech = find(cellfun(@isempty,SetList.textdata.SetList(:,1))==1,1)-2; % i - number of technology concepts
+techtype = find(cellfun(@isempty,SetList.textdata.SetList(:,9))==1,1)-2;  % tt - number of technology types
+modul = find(cellfun(@isempty,SetList.textdata.SetList(:,5))==1,1)-2;  % m - number of technology modules
 market = find(cellfun(@isempty,SetList.textdata.SetList(:,13))==1,1)-2; % j  refers to the sub-sectors, described in the publications
 cluster=3;  %c
-biotype = find(cellfun(@isempty,SetList.textdata.SetList(:,18))==1,1)-2; % bt 
-bioprod = find(cellfun(@isempty,SetList.textdata.SetList(:,22))==1,1)-2; % b 
-GHGtechtype = find(cellfun(@isempty,SetList.textdata.SetList(:,27))==1,1)-2; % gtt 
+biotype = find(cellfun(@isempty,SetList.textdata.SetList(:,18))==1,1)-2; % bt - biomass type
+bioprod = find(cellfun(@isempty,SetList.textdata.SetList(:,22))==1,1)-2; % b - biomass product
+GHGtechtype = find(cellfun(@isempty,SetList.textdata.SetList(:,27))==1,1)-2; % gtt - technology types defined for the calculation of the emission factors
 
 % Reforming for GAMS communication
 tims= strsplit(num2str(1:time));
@@ -194,22 +194,22 @@ end
 irgdx('idxdata')
 
 % Renaming
-v=vp;
-vBio=vBiop; %#ok<*NASGU>
-vGas=vGasp;
-v3=v3p;
-bu=bup;
-bc=bcp;
-ghgf=ghgfp;
-ghgt=ghgtp;
-ncap=ncapp;
-ncap1=ncap1p;
-ncap2=ncap2p;
-next=nextp;
-nprod=nprodp;
-nxdec=nxdecp;
-vBeh=vBehp;
-tc=tcp;
+v=vp; % Heat production [GJ]
+vBio=vBiop; % Solid Biomass heat production [GJ]
+vGas=vGasp; % gas_biogas_coal heat production [GJ]
+v3=v3p; % Non-Biomass heat production [GJ]
+bu=bup; % Actual converted biomass from biotype to bioprod [GJ]
+bc=bcp; % Actual consumed biomass in the technology [GJ]
+ghgf=ghgfp; % Actual feedstock GHG emissions [t]
+ghgt=ghgtp; % Actual technology GHG emissions [t]
+nprod=nprodp; % Number of HS producing heat
+ncap=ncapp; % Number of existing HS per technology (Capacity)
+ncap1=ncap1p; % Number of existing HS used for production
+ncap2=ncap2p; % Overcapacity of existing HS
+next=nextp; % Number of heating systems\modules extended
+nxdec=nxdecp; % Number of HS of next that reach their lifetime
+vBeh=vBehp; % Heat production in the clusters [GJ]
+tc=tcp; % Total system costs
 
 clear vp vBiop vGasp v3p bup bcp ncapp ncap1p ncap2p nextp nprodp nxdecp tcp ghgfp ghgtp vBehp
 
