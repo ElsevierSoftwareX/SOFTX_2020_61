@@ -1,4 +1,4 @@
-#BENOPT-HEAT - Optimizing bioenergy use in the German heat sector
+# BENOPT-HEAT - Optimizing bioenergy use in the German heat sector
 
 The model was developed to identify the optimal use of biomass within the German heat sector. The heat sector is divided into 19 sub-sectors. For each sub-sector, a variety of representative bioenergy-, fossil- and other renewable (hybrid-) heat technology concepts are described, see data publication (https://data.mendeley.com/datasets/v2c93n28rj/2). Within scenarios, the optimal use of bioenergy is determined. A systematic uncertainty assessment can be conducted by applying a global sensitivity analysis. The model runs in Matlab and needs to be coupled with GAMS, where the actual optimization is conducted.
 
