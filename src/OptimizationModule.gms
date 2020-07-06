@@ -30,13 +30,13 @@ $loadR t
 
  i               Technologies
 $loadR i
- i2034(i)        Technologies that do not use pappel pellets before 2035 /18,19,20/
+ i2034(i)        Technologies that do not use poplar pellets before 2035 /18,19,20/
  ihp(i)          Heat pump technologies /7*12,19,22,27,32,35/
 
  m               Plantmodules
 $loadR m
 
- j               Markets referring to sub-sectors in the papers
+ j               Markets referring to sub-sectors
 $loadR j
  jclus(j)        Markets with sub-clusters /1*5/
 
@@ -72,14 +72,14 @@ $loadR BB
 ;
 
 parameters
- vc(t,i,j,b)     Variable costs [€:GJ]
- inv(t,i,m,j)    Investment cost per plant [€]
+ vc(t,i,j,b)     Variable costs [:GJ]
+ inv(t,i,m,j)    Investment cost per plant []
  pmBio(t,i,j)    biomass share per technology [%]
  pmGas(t,i,j)    gas_coal share per technology [%]
  pm3(t,i,j)      non biomass_gas_coal share per technology [%]
- efBio(t,i,j)    Degree of efficiency solid biomass
- efGas(t,i,j)    Degree of efficiency gas_biogas
- efMethan(t,b)   Degree of efficiency for the "biomethaneinspeiseanlage"
+ efBio(t,i,j)    Conversion efficiency solid biomass
+ efGas(t,i,j)    Conversion efficiency gas_biogas
+ efMethan(t,b)   Conversion efficiency for the "biomethaneinspeiseanlage"
  life(i,m,j)     lifetime of heating system [a]
  ba(t,bm)        Available biomass [GJ and ha]
  bamaxw(t)       Maximal allowed biomass usage from waste ba [%]
@@ -93,9 +93,9 @@ parameters
  dcap(t,j)       Heat demand per house or HS [GJ]
  nstart(i,j)     Initial stock of HS
  nsdec(t,i,m,j)  Yearly decrease of initial stock of HS
- culstart(b)     Cultivation portofilio in the first 5 years
- vcBeh(t,i,j,c)  Intangible variable costs [€:GJ]
- invBeh(t,i,j,c) Intangible investment costs [€]
+ culstart(b)     Crop cultivation portfolio in the first 5 years
+ vcBeh(t,i,j,c)  Intangible variable costs [:GJ]
+ invBeh(t,i,j,c) Intangible investment costs []
  dBeh(t,j,c)     Demand in the clusters
 
 * definition of parameters for the export (equal the variables)
@@ -121,7 +121,7 @@ parameters
 $loadR d, dcap, vc, inv, pmBio, pmGas, pm3, efBio, efGas, efMethan , life, ba, bamaxw, bamaxc, nstart, nsdec, yield, culstart, ghgr, ghgfeed, alloc, ghgmax, vcBeh, invBeh, dBeh
 
 free variable
- tc              Total costs [€]
+ tc              Total costs []
  ghgtot          GHG total emission [t]
 ;
 
@@ -151,26 +151,26 @@ next.fx("1",i,m,j)=0;
 ndec.fx("1",i,m,j)=0;
 nxdec.fx("1",i,m,j)=0;
 
-*forbits certain technologies on certain markets
+*forbids certain technologies on certain markets
 v.fx(t,i,j) $ (not MT(i,j))=0;
 
-*forbits certain technologies to use certain biomass products
+*forbids certain technologies to use certain biomass products
 bc.fx(t,i,j,b) $ (not TB(i,b))=0;
 bc.fx(t2034,i2034,j,"14")=0;
 
-*forbits certain bioproducts to use certain biomass types
+*forbids certain bioproducts to use certain biomass types
 bu.fx(t,b,bm) $ (not BB(bm,b))=0;
 
 *number of plants in starting year
 ncap1.fx("1",i,m,j)=nstart(i,j);
 
-*sets MüllHKW constant
+*sets MllHKW constant
 nprod.fx(t,"28","15")=nstart("28","15");
 
 *sets Leach boiler constant
 nprod.fx(t,"48","16")=nstart("48","16");
 
-*During the decrease of the initial stock, overcapacity is forbitten; despite in district heating market (i=24) and market 14 in the 95% case
+*During the decrease of the initial stock, overcapacity is forbidden; despite in district heating market (i=24) and market 14 in the 95% case
 ncap2.fx(t,i,"1",j) $ (ord(t)<=life(i,"1",j)+1 and not ord(i)=24 and not ord(j)=14)=0;
 
 *overcapacity only allowed for gas boiler/coal...
@@ -194,11 +194,11 @@ ncap2fct         Overcapacity = total capacity - production capacity
 ncap3fct         HS in overcapacity cannot be reused for production
 ncap2ctrl1       Yearly overcapacity is limited to XX%
 
-ndecfct          defines all ndec's
+ndecfct          defines all ndecs
 nxdec1fct        Defines nxdec in relation to next
 
 nocfct           allowes number of producing HS to be smaller than number of capacity HS (overcapacity for secondary modules possible) also defines minimum number of all modules
-n1fct            Forbits over capacity of modul 1 of ncap1
+n1fct            Forbids over capacity of modul 1 of ncap1
 mbioprodfct      Definition of maximum solid biomass production per technology
 mgasprodfct      Definition of maximum gas_biogas_coal production per technology
 m3prodfct        Definition of maximum non-biomass production per technology
@@ -206,7 +206,7 @@ mprodsumfct      Total heat production = biomass production + non biomass produc
 
 bcfct            Consumed biomass = heat consumption divided by degree of efficiency
 bcGasScheit      Technology GasBW+ScheitO can use different biomass products for different components. This equation regulates this issue
-bcWaste2Energy   Technology MüllHKW+HHS-Kessel can use different biomass products for different components. This equation regulates this issue
+bcWaste2Energy   Technology MllHKW+HHS-Kessel can use different biomass products for different components. This equation regulates this issue
 bcHHSCoal        Technology HHSCoal can use different biomass products for different components. This equation regulates this issue
 bamaxwastefct    Consumed biomass of residues is limited to a certain degree of percentage
 ba1fct           Which residue biomass types can be used for which biomass products
