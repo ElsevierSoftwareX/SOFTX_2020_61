@@ -61,6 +61,12 @@ ghgti80l = interp1(ghgin(1:7,25),ghgin(1:7,26),1990:1:2050,'linear');
 % interpolate for Industry emissions 95% scenario
 ghgti95l = interp1(ghgin(1:7,27),ghgin(1:7,28),1990:1:2050,'linear');
 
+% interpolate for heat based emissions 100% scenario
+ghgth100 = interp1(ghgin(1:7,29),ghgin(1:7,30),1990:1:2050,'linear');
+
+% interpolate for heat based emissions 95% in 2045 scenario
+ghgth95_2045 = interp1(ghgin(1:7,31),ghgin(1:7,32),1990:1:2050,'linear');
+
 % Calculation of GHG reduction compared to prervious year
 ghgrede80l=zeros(1,61);
 ghgrede95l=zeros(1,61);
@@ -70,6 +76,8 @@ ghgredh80l=zeros(1,61);
 ghgredh95l=zeros(1,61);
 ghgredo80l=zeros(1,61);
 ghgredo95l=zeros(1,61);
+ghgredh100=zeros(1,61);
+ghgredh95_2045=zeros(1,61);
 for t=2:61
     ghgrede80l(t)=1-ghgte80l(t)/ghgte80l(t-1);
     ghgrede95l(t)=1-ghgte95l(t)/ghgte95l(t-1);
@@ -79,7 +87,12 @@ for t=2:61
     ghgredh95l(t)=1-ghgth95l(t)/ghgth95l(t-1);
     ghgredo80l(t)=1-ghgto80l(t)/ghgto80l(t-1);
     ghgredo95l(t)=1-ghgto95l(t)/ghgto95l(t-1);
+    ghgredh100(t)=1-ghgth100(t)/ghgth100(t-1);
+    ghgredh95_2045(t)=1-ghgth95_2045(t)/ghgth95_2045(t-1);
 end
+
+% Replace Nan by zero
+ghgredh100(isnan(ghgredh100))=0;
 
 % Calculation of percentage compared to 1990
 ghg90e80l=zeros(1,61);
@@ -103,10 +116,14 @@ end
 
 
  % Save vector for model
- ghg80=ghgredh80l(26:61);
- save('ScenarioData.mat','ghg80','-append');
- ghg95=ghgredh95l(26:61);
- save('ScenarioData.mat','ghg95','-append');
+  ghg80=ghgredh80l(31:61);
+  save('ScenarioData.mat','ghg80','-append');
+  ghg95=ghgredh95l(31:61);
+  save('ScenarioData.mat','ghg95','-append');
+  ghg100=ghgredh100(31:61);
+  save('ScenarioData.mat','ghg100','-append');
+  ghg95_2045=ghgredh95_2045(31:61);
+  save('ScenarioData.mat','ghg95_2045','-append');
 
 % Plot GHG Emission comparison
 figure (1);

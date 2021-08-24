@@ -43,7 +43,7 @@ disp('Pre-calculations started');
 %% Define Sets
 
 load('SetList.mat');
-time = 36;  % t - time / number of years
+time = 31;  % t - time / number of years
 tech = find(cellfun(@isempty,SetList.textdata.SetList(:,1))==1,1)-2; % i - number of technology concepts
 techtype = find(cellfun(@isempty,SetList.textdata.SetList(:,9))==1,1)-2;  % tt - number of technology types
 modul = find(cellfun(@isempty,SetList.textdata.SetList(:,5))==1,1)-2;  % m - number of technology modules
@@ -133,7 +133,7 @@ tb.type='set';
 tb.form='full';
 tb.val=bioprodtech';
 
-%Definition of which biomass types go into which biomass products
+% Definition of which biomass types go into which biomass products
 biotypebioprod=SetList.data.BioType2BioProduct(3:end,3:end);
 biotypebioprod(isnan(biotypebioprod))=0;
 

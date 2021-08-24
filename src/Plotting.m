@@ -184,8 +184,8 @@ if fig1==1
     end
     xlim([0 time+1])
     ax=gca;
-    ax.XTick = [1 5:10:36];
-    ax.XTickLabel=[2015 2020:10:2050];
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title(titlefig1,'FontSize',FT(1));
     ylabel(ylabheat,'FontSize',FT(2));
@@ -213,8 +213,8 @@ if fig2==1
         xlim([0 time+1])
         ylim([0 max(sum(v(:,MT{j},j)/1000000,2))+max(sum(v(:,MT{j},j)/1000000,2))/20])
         ax=gca;
-        ax.XTick = [1 6:10:36];
-        ax.XTickLabel= [2015 2020:10:2050];
+        ax.XTick = 1:10:31;
+        ax.XTickLabel=2020:10:2050;
         ax.FontSize=FT(4);
         title(legmarket{j},'FontSize',FT(1));
         l=legend(h(end:-1:1),legtech{MT{j}(end:-1:1)},'Location','southwest');
@@ -240,8 +240,8 @@ if fig2==1
         xlim([0 time+1])
         ylim([0 max(sum(v(:,MT{j},j)/1000000,2))+max(sum(v(:,MT{j},j)/1000000,2))/20])
         ax=gca;
-        ax.XTick = [1 6:10:36];
-        ax.XTickLabel= [2015 2020:10:2050];
+        ax.XTick = 1:10:31;
+        ax.XTickLabel=2020:10:2050;
         ax.FontSize=FT(4);
         title(legmarket{j},'FontSize',FT(1));
         l=legend(h(end:-1:1),legtech{MT{j}(end:-1:1)},'Location','southwest');
@@ -275,8 +275,8 @@ if figBeh==1
             xlim([0 time+1])
             ax=gca;
             if j==5
-                ax.XTick = [1 6:10:36];
-                ax.XTickLabel= [2015 2020:10:2050];
+                ax.XTick = 1:10:31;
+                ax.XTickLabel=2020:10:2050;
                 ax.FontSize=FT(4);
             else
                 ax.XTickLabel={[]};
@@ -327,8 +327,8 @@ if fig3==1
             hold on
             xlim([0 time+1])
             ax=gca;
-            ax.XTick = [1 6:10:36];
-            ax.XTickLabel=[2015 2020:10:2050];
+            ax.XTick = 1:10:31;
+            ax.XTickLabel=2020:10:2050;
             ax.FontSize=FT(4);
             title(legtech{i},'FontSize',FT(1));
             l=legend(h(end:-1:1),legbioprod{TB{i}(end:-1:1)},'Location','southwest');
@@ -352,8 +352,8 @@ if fig4==1
         xlim([0 time+1])
         ylim([0 max(sum(ba.val(:,1:12)/1000000,2))+100])
         ax=gca;
-        ax.XTick = 1:5:36;
-        ax.XTickLabel=2015:5:2050;
+        ax.XTick = 1:10:31;
+        ax.XTickLabel=2020:10:2050;
         ax.FontSize=FT(4);
         title(title1fig3,'FontSize',FT(1));
         ylabel(ylabbiomass,'FontSize',FT(2));
@@ -369,8 +369,8 @@ if fig4==1
         xlim([0 time+1])
         ylim([0 max(sum(ba.val(:,1:12)/1000000,2))+100])
         ax=gca;
-        ax.XTick = [1 6:10:36];
-        ax.XTickLabel=[2015 2020:10:2050];
+        ax.XTick = 1:10:31;
+        ax.XTickLabel=2020:10:2050;
         ax.FontSize=FT(4);
         title(title2fig3,'FontSize',FT(1));
         ylabel(ylabbiomass,'FontSize',FT(2));
@@ -385,8 +385,8 @@ if fig4==1
         plot(squeeze(sum(squeeze(bu(:,:,13))./yield.val(:,:),2,'omitnan')/(1000000)),'--','color','black')
         xlim([0 time+1])
         ax=gca;
-        ax.XTick = [1 6:10:36];
-        ax.XTickLabel=[2015 2020:10:2050];
+        ax.XTick = 1:10:31;
+        ax.XTickLabel=2020:10:2050;
         ax.FontSize=FT(4);
         title(title3fig3,'FontSize',FT(1));
         ylabel(ylabarea,'FontSize',FT(2));
@@ -404,8 +404,8 @@ if fig5==1
     h=area(squeeze(sum(sum(bc(:,:,:,1:23),2),4))/1000000);
     xlim([0 time+1])
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title(title1fig31,'FontSize',FT(1));
     ylabel(ylabbiomass,'FontSize',FT(2));
@@ -419,8 +419,8 @@ if fig5==1
     end
     xlim([0 time+1])
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title(title2fig31,'FontSize',FT(1));
     ylabel(ylabbiomass,'FontSize',FT(2));
@@ -438,8 +438,8 @@ if fig6==1
     end
     xlim([0 time+1])
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title('Biomass distribution in the technologies','FontSize',FT(1));
     ylabel(ylabbiomass,'FontSize',FT(2));
@@ -489,8 +489,8 @@ if fig7==1
     plot(costyearly/1000000000,'color','k','LineWidth',2)
     xlim([0 time+1])
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title(title1fig4,'FontSize',FT(1));
     xlabel(xlabtime,'FontSize',FT(2));
@@ -511,8 +511,8 @@ if fig7==1
     end
     xlim([0 time+1])
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     hold on
     h=bar(Ypos/1000000000,'stack');
@@ -536,8 +536,8 @@ if fig8==1
     end
     xlim([0 time+1])
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     hold on;
     line(1:time,ghgmax.val(:)/1000000,'color','black');
@@ -558,8 +558,8 @@ if fig9==1
     subplot(2,1,1)
     plot(100*sum(sum(ncap2(:,:,1,:),2),4)./sum(sum(nprod(:,:,:),2),3))
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title('Overcapacity in %/a','FontSize',FT(1));
     ylabel('%','FontSize',FT(2));
@@ -571,8 +571,8 @@ if fig9==1
             h(i).FaceColor=coltech{i};
     end
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title('Number of heating systems','FontSize',FT(1));
     ylabel('Number of model heating systems in Mio','FontSize',FT(2));
@@ -592,8 +592,8 @@ if fig10==1
         hold on
         xlim([0 time+1])
         ax=gca;
-        ax.XTick = [1 6:10:36];
-        ax.XTickLabel=[2015 2020:10:2050];
+        ax.XTick = 1:10:31;
+        ax.XTickLabel=2020:10:2050;
         ax.FontSize=FT(4);
         title(legmarket{j},'FontSize',8);
         ylabel('ncap2','FontSize',FT(2));
@@ -619,8 +619,8 @@ if fig11==1
     hold on
     xlim([0 time+1])
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title(['Overcapacity (ncap2) - ' legmarket{j}],'FontSize',FT(1));
     ylabel('Number heating systems','FontSize',FT(2));
@@ -637,8 +637,8 @@ if fig11==1
     hold on
     xlim([0 time+1])
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title(['Used capacity (ncap1) - ' legmarket{j}],'FontSize',FT(1));
     ylabel('Number heating systems','FontSize',FT(2));
@@ -655,8 +655,8 @@ if fig11==1
     hold on
     xlim([0 time+1])
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title(['Decommisioned from the newly invested (nxdec) - ' legmarket{j}],'FontSize',FT(1));
     ylabel('Number heating systems','FontSize',FT(2));
@@ -673,8 +673,8 @@ if fig11==1
     hold on  
     xlim([0 time+1])
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title(['Newly invested in (next) - ' legmarket{j}],'FontSize',FT(1));
     ylabel('Number heating systems','FontSize',FT(2));
@@ -694,8 +694,8 @@ if fig11==1
     plot(sum(nxdec(:,:,1,j),2))
     plot(1,sum(nstart.val(:,j)),'*')
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title(['All n`s - ' legmarket{j}],'FontSize',FT(1));
     ylabel('Number heating systems','FontSize',FT(2));
@@ -713,8 +713,8 @@ if fig12==1
     subplot(2,1,1)
     bar(squeeze(sum(ncap(:,CapTech,TM{CapTech},:),4)),'DisplayName','ncap')
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title(['Capacity of plant modules in ' legtech{CapTech}],'FontSize',FT(1));
     ylabel('Number of plants','FontSize',FT(2));
@@ -725,8 +725,8 @@ if fig12==1
     subplot(2,1,2);
     bar(squeeze(sum(next(:,CapTech,TM{CapTech},:),4)),'DisplayName','next')
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title(['Investments in ' legtech{CapTech}],'FontSize',FT(1));
     ylabel('Number of plants','FontSize',FT(2));
@@ -745,8 +745,8 @@ if fig13==1
     plot(GasPrice*0.36)
     xlim([0 time+1])
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title(title1fig9,'FontSize',FT(1));
     ylabel('Cent/kWh','FontSize',FT(2));
@@ -758,8 +758,8 @@ if fig13==1
     plot(PowerPrice(:,[1 9 15])*0.36)
     xlim([0 time+1])
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title(title2fig9,'FontSize',FT(1));
     ylabel('Cent/kWh','FontSize',FT(2));
@@ -771,8 +771,8 @@ if fig13==1
     h1=plot(COCert);
     xlim([0 time+1])
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title(title3fig9,'FontSize',FT(1));
     ylabel(ylabcost2,'FontSize',FT(2));
@@ -783,8 +783,8 @@ if fig13==1
     plot(yield.val(:,[10 11 12 15 18:23]))
     xlim([0 time+1])
     ax=gca;
-    ax.XTick = 1:5:36;
-    ax.XTickLabel=2015:5:2050;
+    ax.XTick = 1:10:31;
+    ax.XTickLabel=2020:10:2050;
     ax.FontSize=FT(4);
     title(title4fig9,'FontSize',FT(1));
     ylabel(ylabyield,'FontSize',FT(2));
@@ -794,53 +794,43 @@ end
 
 
 
-%% Plot for investment and variable costs over time / markets/ technologies / biomassproducts
+%% Plot for Gestehungskosten over time / markets/ technologies / biomassproducts
+
 if fig14==1
     for j=nMarketOp
         figure (14)
         set(gcf,'position',figsize)
         k=1;
-        for i=[MT{j} 1000]
-            if length(MT{j})+1<=4
+        for i=MT{j}
+            if length(MT{j})<=4
                 subplot(2,2,k);
-            elseif length(MT{j})+1>4 && length(MT{j})+1<=6
+            elseif length(MT{j})>4 && length(MT{j})<=6
                 subplot(2,3,k);
-            elseif length(MT{j})+1>6 && length(MT{j})+1<=9
+            elseif length(MT{j})>6 && length(MT{j})<=9
                 subplot(3,3,k);
-            elseif length(MT{j})+1>9 && length(MT{j})+1<=12
+            elseif length(MT{j})>9 && length(MT{j})<=12
                 subplot(3,4,k);
+            elseif length(MT{j})>12 && length(MT{j})<=16
+                subplot(4,4,k);
             end
             k=k+1;
 
-            % Investment costs
-            if i==1000
-                plot(sum(inv.val(:,MT{j},:,j),3)/1000)
-                xlim([0 time+1])
-                ax=gca;
-                ax.XTick = 1:5:36;
-                ax.XTickLabel=2015:5:2050;
-                ax.FontSize=FT(4);
-                title('Investment costs including subsidies (if selected)','FontSize',FT(1));
-                ylabel('Costs [t€]','FontSize',FT(2));
-                l=legend(legtech{MT{j}},'Location','northeast');
+            % Gestehungskosten = variable costs + invest costs
+            if isempty(TB{i})==1
+                plot(3.6*squeeze(vc.val(:,i,j,1)++sum(inv.val(:,i,:,j),3)./dcap.val(:,j)))
+            else
+                plot(3.6*squeeze(vc.val(:,i,j,TB{i})+sum(inv.val(:,i,:,j),3)./dcap.val(:,j)))
+            end
+            xlim([0 time+1])
+            ax=gca;
+            ax.XTick = 1:10:31;
+            ax.XTickLabel=2020:10:2050;
+            ax.FontSize=FT(4);
+            title([legtech{i}],'FontSize',FT(1));
+            ylabel('Costs [€/MWh]','FontSize',FT(2));
+            if length(TB{i})>1
+                l=legend(legbioprod{TB{i}},'Location','northwest');
                 l.FontSize=FT(3);
-            else % variable costs
-                if isempty(TB{i})==1
-                    plot(squeeze(vc.val(:,i,j,1)))
-                else
-                    plot(squeeze(vc.val(:,i,j,TB{i})))
-                end
-                xlim([0 time+1])
-                ax=gca;
-                ax.XTick = 1:5:36;
-                ax.XTickLabel=2015:5:2050;
-                ax.FontSize=FT(4);
-                title([legtech{i}],'FontSize',FT(1));
-                ylabel('Costs [€/GJ]','FontSize',FT(2));
-                if length(TB{i})>1
-                    l=legend(legbioprod{TB{i}},'Location','northwest');
-                    l.FontSize=FT(3);
-                end
             end
         end
     end
@@ -858,8 +848,8 @@ if fig15==1
         hold on
         xlim([0 time+1])
         ax=gca;
-        ax.XTick = [1 6:10:36];
-        ax.XTickLabel=[2015 2020:10:2050];
+        ax.XTick = 1:10:31;
+        ax.XTickLabel=2020:10:2050;
         ax.YTick = [5 10:10:100];
         ax.FontSize=FT(4);
         ylabel('Costs (€/GJ)','FontSize',FT(2));

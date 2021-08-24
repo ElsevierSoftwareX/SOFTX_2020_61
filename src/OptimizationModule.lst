@@ -1,4 +1,4 @@
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 1
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               08/24/21 10:44:57 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -23,14 +23,14 @@ C o m p i l a t i o n
   18  *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   19   
   21   
-GDXIN   C:\Users\martinm\Documents\BENOPT-HEAT (SmartWirbelschicht)\src\matdata.gdx
+GDXIN   C:\Users\martinm\Documents\BENOPT-HEAT (KonditorGas)\src\matdata.gdx
   23   
   24  sets
   25   stat            Solve status /solvestat,modelstat/
   26   
   27   t               Time
 --- LOAD  t = 1:t
-  29   t2034(t)        Time before 2035 /1*20/
+  29   t2034(t)        Time before 2035 /1*15/
   30   
   31   i               Technologies
 --- LOAD  i = 2:i
@@ -56,7 +56,7 @@ GDXIN   C:\Users\martinm\Documents\BENOPT-HEAT (SmartWirbelschicht)\src\matdata.
   52   bwaste(b)       Bioproduct residues /1*9,27,28/
   53   bcult(b)        Bioproduct cultivation /10*23/
   54   bkup(b)         SRC products /12*14/
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 2
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               08/24/21 10:44:57 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -102,7 +102,7 @@ C o m p i l a t i o n
   93   dcap(t,j)       Heat demand per house or HS [GJ]
   94   nstart(i,j)     Initial stock of HS
   95   nsdec(t,i,m,j)  Yearly decrease of initial stock of HS
-  96   culstart(b)     Crop cultivation portfolio in the first 5 years
+  96   culstart(b)     Crop cultivation portfolio in the first 5 years [ha]
   97   vcBeh(t,i,j,c)  Intangible variable costs [EUR:GJ]
   98   invBeh(t,i,j,c) Intangible investment costs [EUR]
   99   dBeh(t,j,c)     Demand in the clusters [GJ]
@@ -114,7 +114,7 @@ C o m p i l a t i o n
  105   v3p(t,i,j)       Non-Biomass heat production [GJ]
  106   bup(t,b,bm)      Actual converted biomass from biotype to bioprod [GJ]
  107   bcp(t,i,j,b)     Actual consumed biomass in the technology [GJ]
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 3
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               08/24/21 10:44:57 Page 3
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -172,7 +172,7 @@ C o m p i l a t i o n
  134   bc(t,i,j,b)     Actual consumed biomass in the technology [GJ]
  135   ghgf(t,i,j,b)   Actual feedstock GHG emissions [t]
  136   ghgt(t,i,j)     Actual technology GHG emissions [t]
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 4
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               08/24/21 10:44:57 Page 4
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -230,7 +230,7 @@ C o m p i l a t i o n
  187  demandfct        Heat demand per market = sum of heat consumption per market
  188  dcapfct          This equation is supposed to tell that one HS is exactly for one house
  189   
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 5
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               08/24/21 10:44:57 Page 5
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -261,9 +261,9 @@ C o m p i l a t i o n
  213  ba2fct           Limitation of energy crops land potential to biomass products
  214  ba3fct           Which fossil biomass types can be used for which biomass products
  215   
- 216  bufct            Produced amount biomass products = sum of consumed biomass per technologies
+ 216  bufct            Produced amount of biomass products = sum of consumed biomass over the technologies
  217   
- 218  bustart          set portfolio of energy crops in starting years
+ 218  bustart          set portfolio of digestible energy crops in starting years
  219  bustartKup       set portfolio of KUP in starting years
  220  bustartMis       set portfolio of Miscanthus in the starting years
  221  bumax            max increase of energy crops
@@ -288,7 +288,7 @@ C o m p i l a t i o n
  239  totghgfct..              ghgtot=e=sum((t,i,j,b),ghgf(t,i,j,b))+sum((t,i,j),ghgt(t,i,j));
  240   
  241  * Restrictions
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 6
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               08/24/21 10:44:57 Page 6
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -296,193 +296,195 @@ C o m p i l a t i o n
  242  demandfct(t,j)..                                                 d(t,j)=e=sum((i),v(t,i,j));
  243  dcapfct(t,j)..                                                   d(t,j)=e=sum(i,nprod(t,i,j))*dcap(t,j);
  244   
- 245  nfct(t+1,i,m,j) $ (ord(t)<36)..                                  ncap(t+1,i,m,j)=e=ncap(t,i,m,j)+next(t+1,i,m,j)-ndec(t+1,i,m,j);
+ 245  nfct(t+1,i,m,j) $ (ord(t)<31)..                                  ncap(t+1,i,m,j)=e=ncap(t,i,m,j)+next(t+1,i,m,j)-ndec(t+1,i,m,j);
  246   
  247  ncapfct(t,i,m,j)..                                               ncap(t,i,m,j)=e=ncap1(t,i,m,j)+ncap2(t,i,m,j);
  248  ncap2fct(t,i,m,j) $ (ord(t)>1)..                                 ncap2(t,i,m,j)=e=ncap(t,i,m,j)-nprod(t,i,j);
- 249  ncap3fct(t+1,i,j) $ (ord(t)<36)..                                ncap2(t+1,i,"1",j)=g=ncap2(t,i,"1",j)-nsdec(t+1,i,"1",j)-nxdec(t+1,i,"1",j);
+ 249  ncap3fct(t+1,i,j) $ (ord(t)<31)..                                ncap2(t+1,i,"1",j)=g=ncap2(t,i,"1",j)-nsdec(t+1,i,"1",j)-nxdec(t+1,i,"1",j);
  250  ncap2ctrl1(t)..                                                  sum((i,j),ncap2(t,i,"1",j))=l=0.01*sum((i,j),nprod(t,i,j));
  251   
  252  ndecfct(t,i,m,j) $ (ord(t)>1)..                                  ndec(t,i,m,j)=e=nsdec(t,i,m,j)+nxdec(t,i,m,j);
- 253  nxdec1fct(t,i,m,j) $ (ord(t)+life(i,m,j)<37) ..                  nxdec(t+life(i,m,j),i,m,j)=e=next(t,i,m,j);
+ 253  nxdec1fct(t,i,m,j) $ (ord(t)+life(i,m,j)<32) ..                  nxdec(t+life(i,m,j),i,m,j)=e=next(t,i,m,j);
  254   
  255  nocfct(t,i,m,j)..                                                nprod(t,i,j)=l=ncap1(t,i,m,j);
  256  n1fct(t,i,m,j)..                                                 nprod(t,i,j)=e=ncap1(t,i,"1",j);
- 257  mbioprodfct(t,i,j)..                                             nprod(t,i,j)*pmBio(t,i,j)*dcap(t,j)=e=sum(b,vBio(t,i,j,b));
- 258  mgasprodfct(t,i,j)..                                             nprod(t,i,j)*pmGas(t,i,j)*dcap(t,j)=e=sum(b,vGas(t,i,j,b));
- 259  m3prodfct(t,i,j)..                                               nprod(t,i,j)*pm3(t,i,j)*dcap(t,j)=e=v3(t,i,j);
- 260  mprodsumfct(t,i,j)..                                             v(t,i,j)=e=sum(b,vBio(t,i,j,b))+sum(b,vGas(t,i,j,b))+v3(t,i,j);
- 261   
- 262  bcfct(t,i,j,b)..                                                 bc(t,i,j,b)=e=vBio(t,i,j,b)/efBio(t,i,j)+vGas(t,i,j,b)/(efGas(t,i,j)*efMethan(t,b));
- 263  bcGasScheit(t,j)..                                               sum(b,bc(t,"2",j,b))=e=sum(bGas,vGas(t,"2",j,bGas)/(efGas(t,"2",j)*efMethan(t,bGas)))+sum(bScheit,vBio(t,"2",j,bScheit))/efBio(t,"2",j);
- 264  bcWaste2Energy(t,j)..                                            sum(b,bc(t,"28",j,b))=e=vGas(t,"28",j,"26")/efGas(t,"28",j)+sum(bwoodchip,vBio(t,"28",j,bwoodchip))/efBio(t,"28",j);
- 265  bcHHSCoal(t,j)..                                                 sum(b,bc(t,"26",j,b))=e=vGas(t,"26",j,"25")/efGas(t,"26",j)+sum(bwoodchip2,vBio(t,"26",j,bwoodchip2))/efBio(t,"26",j);
- 266  bamaxwastefct(t)..                                               sum(bmwaste(bm),ba(t,bm))*bamaxw(t)=g=sum((i,j,bwaste(b)),bc(t,i,j,b));
- 267   
- 268  ba1fct(t,bmwaste)..                                              ba(t,bmwaste)=g=sum(b,bu(t,b,bmwaste));
- 269  ba2fct(t)..                                                      ba(t,"13")*bamaxc(t)=g=sum(bcult(b),bu(t,b,"13")/yield(t,b));
- 270  ba3fct(t)..                                                      ba(t,"14")=g=sum(b,bu(t,b,"13"));
- 271   
- 272  bufct(t,b)..                                                     sum(bm,bu(t,b,bm))=e=sum((i,j),bc(t,i,j,b));
- 273   
- 274  bustart(bculst)..                                                bu("1",bculst,"13")=e=yield("1",bculst)*culstart(bculst);
- 275  bustartKup..                                                     sum((bkup,bm),bu("1",bkup,bm))=e=yield("1","12")*culstart("12");
- 276  bustartMis..                                                     sum((bmis,bm),bu("1",bmis,bm))=e=yield("1","15")*culstart("15");
- 277  bumax(t+1,bculst) $ (ord(t)<36)..                                bu(t+1,bculst,"13")=l=2*bu(t,bculst,"13");
- 278  bumaxKup(t+1) $ (ord(t)<36)..                                    sum(bkup,bu(t+1,bkup,"13"))=l=2*sum(bkup,bu(t,bkup,"13"));
- 279  bumaxMis(t+1) $ (ord(t)<36)..                                    sum(bmis,bu(t+1,bmis,"13"))=l=2*sum(bmis,bu(t,bmis,"13"));
- 280   
- 281  ghgffct(t,i,j,b)..                                               ghgf(t,i,j,b)=e=alloc(i,j)*ghgfeed(b)*bc(t,i,j,b);
- 282  ghgtfct(t,i,j)..                                                 ghgt(t,i,j)=e=alloc(i,j)*ghgr(t,i,j)*v(t,i,j);
- 283  ghgmaxfct(t) $(ghgmax("1")>0) ..                                 ghgmax(t)=g=sum((i,j,b),ghgf(t,i,j,b))+sum((i,j),ghgt(t,i,j));
- 284   
- 285  vBehfct1(t,jclus,c) $(dBeh("1","1","1")>0) ..                    dBeh(t,jclus,c)=e=sum(i,vBeh(t,i,jclus,c));
- 286  vBehfct2(t,i,jclus) $(dBeh("1","1","1")>0) ..                    sum(c,vBeh(t,i,jclus,c))=e=v(t,i,jclus);
- 287  nprodBehfct1(t,i,jclus,c) $(dBeh("1","1","1")>0) ..              nprodBeh(t,i,jclus,c)*dcap(t,jclus)=e=vBeh(t,i,jclus,c);
- 288  nprodBehfct2(t,i,jclus) $(dBeh("1","1","1")>0) ..                sum(c,nprodBeh(t,i,jclus,c))=e=nprod(t,i,jclus);
- 289   
- 290   
+ 257   
+ 258  mbioprodfct(t,i,j)..                                             nprod(t,i,j)*pmBio(t,i,j)*dcap(t,j)=e=sum(b,vBio(t,i,j,b));
+ 259  mgasprodfct(t,i,j)..                                             nprod(t,i,j)*pmGas(t,i,j)*dcap(t,j)=e=sum(b,vGas(t,i,j,b));
+ 260  m3prodfct(t,i,j)..                                               nprod(t,i,j)*pm3(t,i,j)*dcap(t,j)=e=v3(t,i,j);
+ 261  mprodsumfct(t,i,j)..                                             v(t,i,j)=e=sum(b,vBio(t,i,j,b))+sum(b,vGas(t,i,j,b))+v3(t,i,j);
+ 262   
+ 263  bcfct(t,i,j,b)..                                                 bc(t,i,j,b)=e=vBio(t,i,j,b)/efBio(t,i,j)+vGas(t,i,j,b)/(efGas(t,i,j)*efMethan(t,b));
+ 264  bcGasScheit(t,j)..                                               sum(b,bc(t,"2",j,b))=e=sum(bGas,vGas(t,"2",j,bGas)/(efGas(t,"2",j)*efMethan(t,bGas)))+sum(bScheit,vBio(t,"2",j,bScheit))/efBio(t,"2",j);
+ 265  bcWaste2Energy(t,j)..                                            sum(b,bc(t,"28",j,b))=e=vGas(t,"28",j,"26")/efGas(t,"28",j)+sum(bwoodchip,vBio(t,"28",j,bwoodchip))/efBio(t,"28",j);
+ 266  bcHHSCoal(t,j)..                                                 sum(b,bc(t,"26",j,b))=e=vGas(t,"26",j,"25")/efGas(t,"26",j)+sum(bwoodchip2,vBio(t,"26",j,bwoodchip2))/efBio(t,"26",j);
+ 267  bamaxwastefct(t)..                                               sum(bmwaste(bm),ba(t,bm))*bamaxw(t)=g=sum((i,j,bwaste(b)),bc(t,i,j,b));
+ 268   
+ 269  ba1fct(t,bmwaste)..                                              ba(t,bmwaste)=g=sum(b,bu(t,b,bmwaste));
+ 270  ba2fct(t)..                                                      ba(t,"13")*bamaxc(t)=g=sum(bcult(b),bu(t,b,"13")/yield(t,b));
+ 271  ba3fct(t)..                                                      ba(t,"14")=g=sum(b,bu(t,b,"14"));
+ 272   
+ 273  bufct(t,b)..                                                     sum(bm,bu(t,b,bm))=e=sum((i,j),bc(t,i,j,b));
+ 274   
+ 275  bustart(bculst)..                                                bu("1",bculst,"13")=e=yield("1",bculst)*culstart(bculst);
+ 276  bustartKup..                                                     sum((bkup,bm),bu("1",bkup,bm))=e=yield("1","12")*culstart("12");
+ 277  bustartMis..                                                     sum((bmis,bm),bu("1",bmis,bm))=e=yield("1","15")*culstart("15");
+ 278   
+ 279  bumax(t+1,bculst) $ (ord(t)<31)..                                bu(t+1,bculst,"13")=l=2*bu(t,bculst,"13");
+ 280  bumaxKup(t+1) $ (ord(t)<31)..                                    sum(bkup,bu(t+1,bkup,"13"))=l=2*sum(bkup,bu(t,bkup,"13"));
+ 281  bumaxMis(t+1) $ (ord(t)<31)..                                    sum(bmis,bu(t+1,bmis,"13"))=l=2*sum(bmis,bu(t,bmis,"13"));
+ 282   
+ 283  ghgffct(t,i,j,b)..                                               ghgf(t,i,j,b)=e=alloc(i,j)*ghgfeed(b)*bc(t,i,j,b);
+ 284  ghgtfct(t,i,j)..                                                 ghgt(t,i,j)=e=alloc(i,j)*ghgr(t,i,j)*v(t,i,j);
+ 285  ghgmaxfct(t) $(ghgmax("1")>0) ..                                 ghgmax(t)=g=sum((i,j,b),ghgf(t,i,j,b))+sum((i,j),ghgt(t,i,j));
+ 286   
+ 287  vBehfct1(t,jclus,c) $(dBeh("1","1","1")>0) ..                    dBeh(t,jclus,c)=e=sum(i,vBeh(t,i,jclus,c));
+ 288  vBehfct2(t,i,jclus) $(dBeh("1","1","1")>0) ..                    sum(c,vBeh(t,i,jclus,c))=e=v(t,i,jclus);
+ 289  nprodBehfct1(t,i,jclus,c) $(dBeh("1","1","1")>0) ..              nprodBeh(t,i,jclus,c)*dcap(t,jclus)=e=vBeh(t,i,jclus,c);
+ 290  nprodBehfct2(t,i,jclus) $(dBeh("1","1","1")>0) ..                sum(c,nprodBeh(t,i,jclus,c))=e=nprod(t,i,jclus);
  291   
  292   
- 293  model BensimHeat /all/;
+ 293   
  294   
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 7
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               08/24/21 10:44:57 Page 7
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
 
- 295  option LP=cplex;
- 296  *option MINLP=CBC;
- 297  *option MIP=cplex;
- 298  *option MIP=CBC;
- 299   
- 300  *this option terminates the solver after X seconds
- 301  option Reslim=45000;
- 302   
- 303  *This option can reduce or track runtime (model generation?)
- 304  *option profile=1;
- 305   
- 306  *option threads=4;
+ 295  model BensimHeat /all/;
+ 296   
+ 297  option LP=cplex;
+ 298  *option MINLP=CBC;
+ 299  *option MIP=cplex;
+ 300  *option MIP=CBC;
+ 301   
+ 302  *this option terminates the solver after X seconds
+ 303  option Reslim=45000;
+ 304   
+ 305  *This option can reduce or track runtime (model generation?)
+ 306  *option profile=1;
  307   
- 308  *turning off scaling
- 309  * this creates a option file on the fly
- 310  *$onecho > cplex.opt
- 311  *scaind=-1
- 312  *$offecho
- 313  * this tells GAMS to use the option file
- 314  *benopt.optfile=1;
- 315   
- 316  *specifying a smaller integrality tolerance
- 317  *option epint=1e-005;
- 318   
- 319  *but in cases where the parameter NumericalEmphasis is turned on, CPLEX computes MIP kappa for a sample of subproblems
- 320  *option numericalemphasis=1;
- 321   
- 322  * With these options all the information is not stored in the list file
- 323  option limrow = 0;
- 324  option limcol = 0;
- 325  option solprint = off;
- 326   
- 327  * Define the objective function and solve
- 328  solve BensimHeat minimizing tc using LP;
- 329   
- 330  returnStat('solvestat') = BensimHeat.solvestat;
- 331  returnStat('modelstat') = BensimHeat.modelstat;
- 332   
- 333  * save results in parameter for indexed GDX file transfer
- 334  vp(t,i,j) = v.l(t,i,j);
- 335  vBiop(t,i,j,b) = vBio.l(t,i,j,b);
- 336  vGasp(t,i,j,b) = vGas.l(t,i,j,b);
- 337  v3p(t,i,j) = v3.l(t,i,j);
- 338  bup(t,b,bm) = bu.l(t,b,bm);
- 339  bcp(t,i,j,b) = bc.l(t,i,j,b);
- 340  ghgfp(t,i,j,b) = ghgf.l(t,i,j,b);
- 341  ghgtp(t,i,j) = ghgt.l(t,i,j);
- 342  nprodp(t,i,j) = nprod.l(t,i,j);
- 343  ncapp(t,i,m,j) = ncap.l(t,i,m,j);
- 344  ncap1p(t,i,m,j) = ncap1.l(t,i,m,j);
- 345  ncap2p(t,i,m,j) = ncap2.l(t,i,m,j);
- 346  nextp(t,i,m,j) = next.l(t,i,m,j);
- 347  nxdecp(t,i,m,j) = nxdec.l(t,i,m,j);
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 8
+ 308  *option threads=4;
+ 309   
+ 310  *turning off scaling
+ 311  * this creates a option file on the fly
+ 312  *$onecho > cplex.opt
+ 313  *scaind=-1
+ 314  *$offecho
+ 315  * this tells GAMS to use the option file
+ 316  *benopt.optfile=1;
+ 317   
+ 318  *specifying a smaller integrality tolerance
+ 319  *option epint=1e-005;
+ 320   
+ 321  *but in cases where the parameter NumericalEmphasis is turned on, CPLEX computes MIP kappa for a sample of subproblems
+ 322  *option numericalemphasis=1;
+ 323   
+ 324  * With these options all the information is not stored in the list file
+ 325  option limrow = 0;
+ 326  option limcol = 0;
+ 327  option solprint = off;
+ 328   
+ 329  * Define the objective function and solve
+ 330  solve BensimHeat minimizing tc using LP;
+ 331   
+ 332  returnStat('solvestat') = BensimHeat.solvestat;
+ 333  returnStat('modelstat') = BensimHeat.modelstat;
+ 334   
+ 335  * save results in parameter for indexed GDX file transfer
+ 336  vp(t,i,j) = v.l(t,i,j);
+ 337  vBiop(t,i,j,b) = vBio.l(t,i,j,b);
+ 338  vGasp(t,i,j,b) = vGas.l(t,i,j,b);
+ 339  v3p(t,i,j) = v3.l(t,i,j);
+ 340  bup(t,b,bm) = bu.l(t,b,bm);
+ 341  bcp(t,i,j,b) = bc.l(t,i,j,b);
+ 342  ghgfp(t,i,j,b) = ghgf.l(t,i,j,b);
+ 343  ghgtp(t,i,j) = ghgt.l(t,i,j);
+ 344  nprodp(t,i,j) = nprod.l(t,i,j);
+ 345  ncapp(t,i,m,j) = ncap.l(t,i,m,j);
+ 346  ncap1p(t,i,m,j) = ncap1.l(t,i,m,j);
+ 347  ncap2p(t,i,m,j) = ncap2.l(t,i,m,j);
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               08/24/21 10:44:57 Page 8
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
 
- 348  vBehp(t,i,j,c) = vBeh.l(t,i,j,c);
- 349  tcp = tc.l;
- 350   
- 351  execute_unload 'matsol.gdx', returnstat ;
- 352  execute_unloadIdx 'idxdata', vp, vBiop, vGasp, v3p, ghgfp, ghgtp, bup, bcp, ncapp, ncap1p, ncap2p, nextp, nprodp, nxdecp, vBehp, tcp;
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 9
+ 348  nextp(t,i,m,j) = next.l(t,i,m,j);
+ 349  nxdecp(t,i,m,j) = nxdec.l(t,i,m,j);
+ 350  vBehp(t,i,j,c) = vBeh.l(t,i,j,c);
+ 351  tcp = tc.l;
+ 352   
+ 353  execute_unload 'matsol.gdx', returnstat ;
+ 354  execute_unloadIdx 'idxdata', vp, vBiop, vGasp, v3p, ghgfp, ghgtp, bup, bcp, ncapp, ncap1p, ncap2p, nextp, nprodp, nxdecp, vBehp, tcp;
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               08/24/21 10:44:57 Page 9
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Include File Summary
 
 
    SEQ   GLOBAL TYPE      PARENT   LOCAL  FILENAME
 
-     1        1 INPUT          0       0  C:\Users\martinm\Documents\BENOPT-HEAT (SmartWirbelschicht)\src\OptimizationModule.gms
-     2       22 GDXIN          1      22  C:\Users\martinm\Documents\BENOPT-HEAT (SmartWirbelschicht)\src\matdata.gdx
+     1        1 INPUT          0       0  C:\Users\martinm\Documents\BENOPT-HEAT (KonditorGas)\src\OptimizationModule.gms
+     2       22 GDXIN          1      22  C:\Users\martinm\Documents\BENOPT-HEAT (KonditorGas)\src\matdata.gdx
 
 
-COMPILATION TIME     =        0.172 SECONDS     38 MB  28.2.0 r750fa45 WEX-WEI
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                              04/12/21 16:04:54 Page 10
+COMPILATION TIME     =        0.187 SECONDS     38 MB  28.2.0 r750fa45 WEX-WEI
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                              08/24/21 10:44:57 Page 10
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Model Statistics    SOLVE BensimHeat Using LP From line 328
+Model Statistics    SOLVE BensimHeat Using LP From line 330
 
 
 MODEL STATISTICS
 
-BLOCKS OF EQUATIONS          39     SINGLE EQUATIONS    3,972,684
-BLOCKS OF VARIABLES          17     SINGLE VARIABLES    6,044,337
-NON ZERO ELEMENTS    20,033,953
+BLOCKS OF EQUATIONS          39     SINGLE EQUATIONS    3,537,782
+BLOCKS OF VARIABLES          17     SINGLE VARIABLES    5,387,149
+NON ZERO ELEMENTS    18,072,157
 
 
-GENERATION TIME      =       17.375 SECONDS  1,944 MB  28.2.0 r750fa45 WEX-WEI
+GENERATION TIME      =       19.563 SECONDS  1,746 MB  28.2.0 r750fa45 WEX-WEI
 
 
-EXECUTION TIME       =       17.672 SECONDS  1,944 MB  28.2.0 r750fa45 WEX-WEI
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                              04/12/21 16:04:54 Page 11
+EXECUTION TIME       =       19.782 SECONDS  1,746 MB  28.2.0 r750fa45 WEX-WEI
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                              08/24/21 10:44:57 Page 11
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Solution Report     SOLVE BensimHeat Using LP From line 328
+Solution Report     SOLVE BensimHeat Using LP From line 330
 
 
                S O L V E      S U M M A R Y
 
      MODEL   BensimHeat          OBJECTIVE  tc
      TYPE    LP                  DIRECTION  MINIMIZE
-     SOLVER  CPLEX               FROM LINE  328
+     SOLVER  CPLEX               FROM LINE  330
 
 **** SOLVER STATUS     1 Normal Completion         
 **** MODEL STATUS      1 Optimal                   
-**** OBJECTIVE VALUE    3205019275454.9531
+**** OBJECTIVE VALUE    3005693040669.4185
 
- RESOURCE USAGE, LIMIT         39.391     45000.000
- ITERATION COUNT, LIMIT     34452    2000000000
+ RESOURCE USAGE, LIMIT         51.500     45000.000
+ ITERATION COUNT, LIMIT     33717    2000000000
 
 IBM ILOG CPLEX   28.2.0 r750fa45 Released Aug 19, 2019 WEI x86 64bit/MS Window
 --- GAMS/Cplex licensed for continuous and discrete problems.
 Cplex 12.9.0.0
 
-Space for names approximately 240.95 Mb
+Space for names approximately 214.38 Mb
 Use option 'names no' to turn use of names off
 LP status(1): optimal
-Cplex Time: 26.53sec (det. 10140.59 ticks)
+Cplex Time: 34.25sec (det. 10406.74 ticks)
 Optimal solution found.
-Objective : 3205019275454.953125
+Objective : 3005693040669.418457
 
 
 
 **** REPORT SUMMARY :        0     NONOPT
                              0 INFEASIBLE
                              0  UNBOUNDED
-                         19896  PROJECTED
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                              04/12/21 16:04:54 Page 12
+                          9969  PROJECTED
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                              08/24/21 10:44:57 Page 12
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 E x e c u t i o n
 
 
-EXECUTION TIME       =        1.859 SECONDS    781 MB  28.2.0 r750fa45 WEX-WEI
+EXECUTION TIME       =        2.218 SECONDS    700 MB  28.2.0 r750fa45 WEX-WEI
 
 
 USER: Small MUD - 5 User License                     S191010/0001AO-WIN
@@ -492,5 +494,5 @@ USER: Small MUD - 5 User License                     S191010/0001AO-WIN
 
 **** FILE SUMMARY
 
-Input      C:\Users\martinm\Documents\BENOPT-HEAT (SmartWirbelschicht)\src\OptimizationModule.gms
-Output     C:\Users\martinm\Documents\BENOPT-HEAT (SmartWirbelschicht)\src\OptimizationModule.lst
+Input      C:\Users\martinm\Documents\BENOPT-HEAT (KonditorGas)\src\OptimizationModule.gms
+Output     C:\Users\martinm\Documents\BENOPT-HEAT (KonditorGas)\src\OptimizationModule.lst

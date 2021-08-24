@@ -90,7 +90,7 @@ function[BP]=BioFeedCost(time,bioprod,priceDevFactor,feedstockInputData,BioResid
 
 
     
- % Prizes for residues [/GJ]
+ % Prizes for residues [EUR/GJ]
     if Sen==0
         for b=1:9
             for t=1:time
@@ -151,8 +151,11 @@ function[BP]=BioFeedCost(time,bioprod,priceDevFactor,feedstockInputData,BioResid
     BP(:,16)=BP(:,15)+7; % Miscanthus briquettes
     BP(:,17)=BP(:,15)+5; % Miscanthus pellets
     
-    % Add invest costs for "Biomethaneinspeiseanlage" according Excel "BiomassData"
-    BP(:,[8:11 18:23])=BP(:,[8:11 18:23])+5.5;
+    % Add specific costs for the conversion of biogas to biomethane in €/GJ
+    BP(:,[10:11 18:23])=BP(:,[10:11 18:23])+0.015/0.0036;
+    
+    % Add specific costs for the feed-in of biomethane into the grid in €/GJ
+    BP(:,[8:11 18:23])=BP(:,[8:11 18:23])+0.03/0.0036;
 
 end
 

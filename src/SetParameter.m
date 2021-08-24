@@ -59,28 +59,28 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     % Biomass potential for residues
     if residues==1 % Min
         for bm=1:12
-            BA(bm,:) = interp1(BAMinMaxData(1,:),BAMinMaxData(bm+3,:),2015:1:2050,'pchip');
+            BA(bm,:) = interp1(BAMinMaxData(1,2:end),BAMinMaxData(bm+3,2:end),2020:1:2050,'pchip');
         end
     elseif residues==2 % Medium
         for bm=1:12
-            BA(bm,:) = interp1(BAMinMaxData(1,:),(BAMinMaxData(bm+3,:)+BAMinMaxData(bm+21,:))/2,2015:1:2050,'pchip');
+            BA(bm,:) = interp1(BAMinMaxData(1,2:end),(BAMinMaxData(bm+3,2:end)+BAMinMaxData(bm+21,2:end))/2,2020:1:2050,'pchip');
         end        
     elseif residues==3 % Max
         for bm=1:12
-            BA(bm,:) = interp1(BAMinMaxData(1,:),BAMinMaxData(bm+21,:),2015:1:2050,'pchip');
+            BA(bm,:) = interp1(BAMinMaxData(1,2:end),BAMinMaxData(bm+21,2:end),2020:1:2050,'pchip');
         end
     elseif residues==5 % Sensitivity
         for bm=[1:5 7] % Wood
-            BA(bm,:) = interp1(BAMinMaxData(1,:),(BAMinMaxData(bm+3,:)+(BAMinMaxData(bm+21,:)-BAMinMaxData(bm+3,:))*Sen(1,32)),2015:1:2050,'pchip');
+            BA(bm,:) = interp1(BAMinMaxData(1,2:end),(BAMinMaxData(bm+3,2:end)+(BAMinMaxData(bm+21,2:end)-BAMinMaxData(bm+3,2:end))*Sen(1,32)),2020:1:2050,'pchip');
         end
         for bm=[6 8 9 10] % Waste wood etc.
-            BA(bm,:) = interp1(BAMinMaxData(1,:),(BAMinMaxData(bm+3,:)+(BAMinMaxData(bm+21,:)-BAMinMaxData(bm+3,:))*Sen(1,33)),2015:1:2050,'pchip');
+            BA(bm,:) = interp1(BAMinMaxData(1,2:end),(BAMinMaxData(bm+3,2:end)+(BAMinMaxData(bm+21,2:end)-BAMinMaxData(bm+3,2:end))*Sen(1,33)),2020:1:2050,'pchip');
         end
         for bm=12 % Digestable
-            BA(bm,:) = interp1(BAMinMaxData(1,:),(BAMinMaxData(bm+3,:)+(BAMinMaxData(bm+21,:)-BAMinMaxData(bm+3,:))*Sen(1,34)),2015:1:2050,'pchip');
+            BA(bm,:) = interp1(BAMinMaxData(1,2:end),(BAMinMaxData(bm+3,2:end)+(BAMinMaxData(bm+21,2:end)-BAMinMaxData(bm+3,2:end))*Sen(1,34)),2020:1:2050,'pchip');
         end
         for bm=11 % Straw
-            BA(bm,:) = interp1(BAMinMaxData(1,:),(BAMinMaxData(bm+3,:)+(BAMinMaxData(bm+21,:)-BAMinMaxData(bm+3,:))*Sen(1,35)),2015:1:2050,'pchip');
+            BA(bm,:) = interp1(BAMinMaxData(1,2:end),(BAMinMaxData(bm+3,2:end)+(BAMinMaxData(bm+21,2:end)-BAMinMaxData(bm+3,2:end))*Sen(1,35)),2020:1:2050,'pchip');
         end
     end
     
@@ -121,11 +121,11 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     
     % Potential available land for energy crops
     if crop==1
-        BA(13,:) = interp1(BAdata(1,:),BAdata(8,:),2015:1:2050,'pchip');
+        BA(13,:) = interp1(BAdata(1,2:end),BAdata(8,2:end),2020:1:2050,'pchip');
     elseif crop==5 %Sensitivity
-        BA(13,:) = interp1(BAdata(1,:),BAdata(9,:)+(BAdata(8,:)-BAdata(9,:))*Sen(1,31),2015:1:2050,'pchip');
+        BA(13,:) = interp1(BAdata(1,2:end),BAdata(9,2:end)+(BAdata(8,2:end)-BAdata(9,2:end))*Sen(1,31),2020:1:2050,'pchip');
     else
-        BA(13,:) = interp1(BAdata(1,:),BAdata(9,:),2015:1:2050,'pchip');
+        BA(13,:) = interp1(BAdata(1,2:end),BAdata(9,2:end),2020:1:2050,'pchip');
     end
     
     % Set fossil potential to 20.000 PJ (equals unlimited)
@@ -143,14 +143,14 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     BAmaxW=zeros(time); % Maximal Biomass usage for residues 80%
     BAmaxC=zeros(time); % Maximal Biomass usage for cultivation 80%
     if biouse == 1
-        BAmaxW = interp1(BAdata(1,[1 3 4]),BAdata(24,[1 3 4]),2015:1:2050,'pchip'); % Maximal Biomass usage for residues 80%
-        BAmaxC = interp1(BAdata(1,[1 3 4]),BAdata(25,[1 3 4]),2015:1:2050,'pchip'); % Maximal Biomass usage for cultivation 80%
+        BAmaxW = interp1(BAdata(1,[2 3 4]),BAdata(24,[2 3 4]),2020:1:2050,'pchip'); % Maximal Biomass usage for residues 80%
+        BAmaxC = interp1(BAdata(1,[2 3 4]),BAdata(25,[2 3 4]),2020:1:2050,'pchip'); % Maximal Biomass usage for cultivation 80%
     elseif biouse==2
-        BAmaxW = interp1(BAdata(1,[1 3 4]),BAdata(31,[1 3 4]),2015:1:2050,'pchip');% Maximal Biomass usage for residues 95%
-        BAmaxC = interp1(BAdata(1,[1 3 4]),BAdata(32,[1 3 4]),2015:1:2050,'pchip');% Maximal Biomass usage for cultivation 95%
+        BAmaxW = interp1(BAdata(1,[2 3 4]),BAdata(31,[2 3 4]),2020:1:2050,'pchip');% Maximal Biomass usage for residues 95%
+        BAmaxC = interp1(BAdata(1,[2 3 4]),BAdata(32,[2 3 4]),2020:1:2050,'pchip');% Maximal Biomass usage for cultivation 95%
     elseif biouse==5 %Sensitivity
-        BAmaxW = interp1(BAdata(1,[1 3 4]),BAdata(31,[1 3 4])+(BAdata(24,[1 3 4])-BAdata(31,[1 3 4]))*Sen(1,30),2015:1:2050,'pchip');% Maximal Biomass usage for residues
-        BAmaxC = interp1(BAdata(1,[1 3 4]),BAdata(32,[1 3 4])+(BAdata(25,[1 3 4])-BAdata(32,[1 3 4]))*Sen(1,30),2015:1:2050,'pchip');% Maximal Biomass usage for cultivation
+        BAmaxW = interp1(BAdata(1,[2 3 4]),BAdata(31,[2 3 4])+(BAdata(24,[2 3 4])-BAdata(31,[2 3 4]))*Sen(1,30),2020:1:2050,'pchip');% Maximal Biomass usage for residues
+        BAmaxC = interp1(BAdata(1,[2 3 4]),BAdata(32,[2 3 4])+(BAdata(25,[2 3 4])-BAdata(32,[2 3 4]))*Sen(1,30),2020:1:2050,'pchip');% Maximal Biomass usage for cultivation
     end
     
     % Set data format for GAMS
@@ -174,16 +174,16 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     if CO2==0
         COCert(1,1:time)=0;
     elseif CO2==100
-        COCert(1,:)=interp1([1:7 11 36],[0 0 0 0 0 0 25 55 100],1:36);
+        COCert(1,:)=interp1([1:2 6 31],[0 25 55 100],1:time);
     elseif CO2==200
-        COCert(1,:)=interp1([1:7 11 36],[0 0 0 0 0 0 25 55 200],1:36);
+        COCert(1,:)=interp1([1:2 6 31],[0 25 55 200],1:time);
     elseif CO2==275
-        COCert(1,:)=interp1([1:7 11 36],[0 0 0 0 0 0 25 55 275],1:36);
+        COCert(1,:)=interp1([1:2 6 31],[0 25 55 275],1:time);
     elseif CO2==5
         
         CO22050=interp1([1 set],[65 300],1:1:set); % Defines the sensitivity range, which is investigated
         for c=1:set
-            CO2Price(c,:)=interp1([1:7 11 36],[0 0 0 0 0 0 25 55 CO22050(c)],1:36);
+            CO2Price(c,:)=interp1([1:2 6 31],[0 25 55 CO22050(c)],1:time);
         end
         COCert=CO2Price(Sen(1,4),:);
     else
@@ -195,19 +195,18 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     
     % Sets the power price according to the selected value (user interface)
     if power==32
+        PowerPriceStockRaw=(interp1([1 time],[30.47 30.47],1:time)/3.6)'; % Day ahead auction
+    elseif power==52
+        PowerPriceStockRaw=PowerPricesStock(6:end,2);
+    elseif power==120
+        PowerPriceStockRaw=PowerPricesStock(6:end,3);
+    elseif power==215
+        PowerPriceStockRaw=PowerPricesStock(6:end,4);
+    elseif power==5
         Power2050=interp1([1 set],[15 165],1:1:set); 
         for p=1:set
-            PowerPriceTimeSeries(p,:)=interp1([1:6 36],[31.2 28.2 32.89 43.26 36.64 36 Power2050(p)],1:36)/3.6;
+            PowerPriceTimeSeries(p,:)=interp1([1 time],[30.47 Power2050(p)],1:time)/3.6; % Day ahead auction
         end
-        PowerPriceStockRaw=PowerPriceTimeSeries(2,:)';
-    elseif power==52
-        PowerPriceStockRaw=PowerPricesStock(:,2);
-    elseif power==120
-        PowerPriceStockRaw=PowerPricesStock(:,3);
-    elseif power==215
-        PowerPriceStockRaw=PowerPricesStock(:,4);
-    elseif power==5
-        
         Power2050=interp1([1 set],[15 165],1:1:set); % Defines the sensitivity range, which is investigated
         for p=1:set
             PowerPriceTimeSeries(p,:)=interp1([1:6 36],[31.2 28.2 32.89 43.26 36.64 36 Power2050(p)],1:36)/3.6; % Defines the sensitivity range, which is investigated
@@ -220,18 +219,18 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     %calculate power price for the sub-sectors
     for j=1:market
         if PrivPowerInd==1 || (PrivPowerInd==5 && Sen(1,44)>=0.5) % Sensitivity
-            PowerPrice(:,j)=PowerPriceStockRaw(:,1) + squeeze(sum(PowerPriceSuppRed(:,[2:5 7:10],j),2));
+            PowerPrice(:,j)=PowerPriceStockRaw(:,1) + squeeze(sum(PowerPriceSuppRed(6:end,[2:5 7:10],j),2));
         else
-            PowerPrice(:,j)=PowerPriceStockRaw(:,1) + squeeze(sum(PowerPriceSupp(:,[2:5 7:10],j),2));
+            PowerPrice(:,j)=PowerPriceStockRaw(:,1) + squeeze(sum(PowerPriceSupp(6:end,[2:5 7:10],j),2));
         end
         if EEGUml==1 || (EEGUml==5 && Sen(1,42)>=0.5) % Sensitivity
-            PowerPrice(:,j)=PowerPrice(:,j)+ squeeze(PowerPriceSupp(:,11,j));
+            PowerPrice(:,j)=PowerPrice(:,j)+ squeeze(PowerPriceSupp(6:end,11,j));
         end
         if EEGUmlRed==1
-            PowerPrice(:,j)=PowerPrice(:,j)+ squeeze(PowerPriceSupp(:,12,j));
+            PowerPrice(:,j)=PowerPrice(:,j)+ squeeze(PowerPriceSupp(6:end,12,j));
         end
         if KWKG==1 || (KWKG==5 && Sen(1,41)>=0.5) % Sensitivity
-            PowerPrice(:,j)=PowerPrice(:,j)+ squeeze(PowerPriceSupp(:,6,j));
+            PowerPrice(:,j)=PowerPrice(:,j)+ squeeze(PowerPriceSupp(6:end,6,j));
         end
         % Add the VAT of 19% for private households
         if j<=8
@@ -245,40 +244,40 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     % 80% scenario
     if (strcmp(target,'80 %') || strcmp(target,'88 %'))
         if sc==1 || sc==6 || sc==7 % KSS 2050
-            GasPrice=GasPriceKSS;
-            CoalPrice=CoalPriceKSS;
-            ghgPowerMix=ghgPowerMixKSS80; % German power mix specific ghg emission factor [g/kWh] for the 80% reduction scenario 
+            GasPrice=GasPriceKSS(end-time+1:end,:);
+            CoalPrice=CoalPriceKSS(:,end-time+1:end);
+            ghgPowerMix=ghgPowerMixKSS80(:,end-time+1:end); % German power mix specific ghg emission factor [g/kWh] for the 80% reduction scenario 
         elseif sc==2 % BMWi
             GasPrice=GasPriceBMWi;
-            CoalPrice=CoalPriceBMWi;
-            ghgPowerMix=ghgPowerMixBMWi80; % German power mix specific ghg emission factor [g/kWh] for the 80% reduction scenario 
+            CoalPrice=CoalPriceBMWi(:,end-time+1:end);
+            ghgPowerMix=ghgPowerMixBMWi80(:,end-time+1:end); % German power mix specific ghg emission factor [g/kWh] for the 80% reduction scenario 
         elseif sc==3 % BioStromWärme
-            GasPrice=GasPriceBSW;
-            CoalPrice=CoalPriceBSW;
-            ghgPowerMix=ghgPowerMixBSW80; % German power mix specific ghg emission factor [g/kWh] for the 80% reduction scenario
+            GasPrice=GasPriceBSW(end-time+1:end,:);
+            CoalPrice=CoalPriceBSW(:,end-time+1:end);
+            ghgPowerMix=ghgPowerMixBSW80(:,end-time+1:end); % German power mix specific ghg emission factor [g/kWh] for the 80% reduction scenario
         
         end
         
     % 95% scenario
-    elseif (strcmp(target,'95 %') || strcmp(target,'98 %') || strcmp(target,'No target'))
+    elseif (strcmp(target,'95 %') || strcmp(target,'97 % in 2045') || strcmp(target,'100 %') || strcmp(target,'No target'))
         if sc==1 || sc==6 || sc==7% KSS 2050
-            GasPrice=GasPriceKSS;
-            CoalPrice=CoalPriceKSS;
-            ghgPowerMix=ghgPowerMixKSS95; % German power mix specific ghg emission factor [g/kWh] for the 95% reduction scenario
+            GasPrice=GasPriceKSS(end-time+1:end,:);
+            CoalPrice=CoalPriceKSS(:,end-time+1:end);
+            ghgPowerMix=ghgPowerMixKSS95(:,end-time+1:end); % German power mix specific ghg emission factor [g/kWh] for the 95% reduction scenario
         elseif sc==2 %BMWi
             error('For 95% reduction no data from the "BMWi Langfristszenarien" exist')
-        elseif sc==3 % BioStromWärme
-            GasPrice=GasPriceBSW;
-            CoalPrice=CoalPriceBSW;
-            ghgPowerMix=ghgPowerMixBSW95; % German power mix specific ghg emission factor [g/kWh] for the 95% reduction scenario
+        elseif sc==3 % BioStromWärme7  
+            GasPrice=GasPriceBSW(end-time+1:end,:);
+            CoalPrice=CoalPriceBSW(:,end-time+1:end);
+            ghgPowerMix=ghgPowerMixBSW95(:,end-time+1:end); % German power mix specific ghg emission factor [g/kWh] for the 95% reduction scenario
         end
     end
        
     %% Constant prices
     if sc==4
-            GasPrice=GasPriceConst;
-            CoalPrice=CoalPriceConst;
-            ghgPowerMix=ghgPowerMixConst; % German power mix specific ghg emission factor [g/kWh] for the 80% reduction scenario
+            GasPrice=GasPriceConst(end-time+1:end,:);
+            CoalPrice=CoalPriceConst(:,end-time+1:end);
+            ghgPowerMix=ghgPowerMixConst(:,end-time+1:end); % German power mix specific ghg emission factor [g/kWh] for the 80% reduction scenario
     end
     
     %% Sobol Sensitivity calculation (Sobol_Main.m)
@@ -314,6 +313,10 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
             load('HeatDemand95fit.mat')
         end
     end
+    
+    % Use DCAP only for the required timeframe
+    DCAP = DCAP(end-time+1:end,1:market);
+    
 
     % Set data format for GAMS
     % heat demand for each market (t,j) [GJ]
@@ -321,14 +324,14 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     d.type = 'parameter';
     d.form = 'full';
     d.name='d';
-    d.val=D(:,1:market);   %#ok<NODEF> %[GJ]
+    d.val=D(end-time+1:end,1:market);   %#ok<NODEF> %[GJ]
     
     % Heat demand for one house/unit (t,j) [GJ]
     dcap.uels = {tims,markets};
     dcap.type = 'parameter';
     dcap.form = 'full';
-    dcap.name='dcap';
-    dcap.val=DCAP(:,1:market);    
+    dcap.name ='dcap';
+    dcap.val = DCAP;    
     
     %% Feedstock prices (t,b,j) [€/GJ]
     
@@ -367,15 +370,15 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     culstart.type = 'parameter';
     culstart.form = 'full';
     culstart.name='culstart';
-    culstart.val=CULSTART(5,:);   
+    culstart.val=CULSTART;   
     
     %% Yields of the energy crops (t,b) [GJ/ha)
 
-    Y11=[0 0 0 0 0 0 0 0 0 YD(1,1) YD(1,2) YD(1,4) YD(1,4) YD(1,4) YD(1,6) YD(1,6) YD(1,6) YD(1,8) YD(1,9) YD(1,11) YD(1,10) YD(1,12) YD(1,13) 0 0 0 0 0];
+    Y20=[0 0 0 0 0 0 0 0 0 YD(1,1) YD(1,2) YD(1,4) YD(1,4) YD(1,4) YD(1,6) YD(1,6) YD(1,6) YD(1,8) YD(1,9) YD(1,11) YD(1,10) YD(1,12) YD(1,13) 0 0 0 0 0];
     Y50=[0 0 0 0 0 0 0 0 0 YD(2,1) YD(2,2) YD(2,4) YD(2,4) YD(2,4) YD(2,6) YD(2,6) YD(2,6) YD(2,8) YD(2,9) YD(2,11) YD(2,10) YD(2,12) YD(2,13) 0 0 0 0 0];
     YIELD=zeros(time,bioprod);
     for b=1:bioprod
-        YIELD(1:time,b)=interp1([2015 2050],[Y11(1,b) Y50(1,b)],2015:1:2050,'linear');
+        YIELD(1:time,b)=interp1([2020 2050],[Y20(1,b) Y50(1,b)],2020:1:2050,'linear');
     end
     
     if sc==5
@@ -433,7 +436,7 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     % load invest costs in 2015 and learning factor. Calculate investment
     % time series until 2050
     INV=zeros(time,tech,modul,market); % Investment costs in each year
-    INVini=zeros(modul,tech,market); % investment costs in 2015
+    INVini=zeros(modul,tech,market); % investment costs in 2020
     INVlearn=zeros(tech,market); % investment learning factor
     for j=1:market
         INVini(1:modul,1:tech,j) = TP(20:19+modul,1:tech,j);
@@ -466,7 +469,11 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
                     if (InvSub==1 && m==1 && t<=24)  || (InvSub==5 && Sen(1,40)>=0.5 && m==1 && t<=24) % Sensitivity
                         INVa(t,i,m,j) = INVa(t,i,m,j)-TP(36,i,j);
                     end
-                    AN(t,i,m,j) = INVa(t,i,m,j)*ir*(1+ir)^life.val(i,m,j)/((1+ir)^life.val(i,m,j)-1);
+                    if (i==57 || i==58) && m==2 % set ir=0 for HPR and GobiGas modul 2
+                        AN(t,i,m,j) = INVa(t,i,m,j)*0.000000000001*(1+0.000000000001)^life.val(i,m,j)/((1+0.000000000001)^life.val(i,m,j)-1);
+                    else
+                        AN(t,i,m,j) = INVa(t,i,m,j)*ir*(1+ir)^life.val(i,m,j)/((1+ir)^life.val(i,m,j)-1);
+                    end
                     if time+1-t>=life.val(i,m,j)
                         ANsum(t,i,m,j) = AN(t,i,m,j).*life.val(i,m,j);
                     elseif time+1-t<life.val(i,m,j)
@@ -517,9 +524,9 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     inv.name='inv';
     inv.val=AN;
     
-    %% Capacity per (hybrid) technology concept per plant (i,j) [J]
+    %% Capacity per (hybrid) technology concept per plant (i,j) [%]
     
-    % Solid biomass capacity (t,i,j) [GJ]
+    % Solid biomass capacity (t,i,j) [%]
     PMBIO=zeros(time,tech,market);
     for t=1:time
         for j=1:market
@@ -534,7 +541,7 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     pmBio.name='pmBio';
     pmBio.val=PMBIO;
     
-    % Gas/biogas/coal/waste capacity (t,i,j) [GJ]
+    % Gas/biogas/coal/waste capacity (t,i,j) [%]
     PMGAS=zeros(time,tech,market);
     for t=1:time
         for j=1:market
@@ -549,7 +556,7 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     pmGas.name='pmGas';
     pmGas.val=PMGAS;
     
-    % Non Biomass/gas/coal Capacity (t,i,j) [GJ]
+    % Non Biomass/gas/coal Capacity (t,i,j) [%]
     PM3=zeros(time,tech,market);
     for t= 1:time
         for j=1:market
@@ -623,34 +630,34 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     efMethan.name='efMethan';
     efMethan.val=EFMethan;    
     
-    %% Number of plants/ plantmodules in 2015 (i,j) (markets = sub-sectors)
+    %% Number of plants/ plantmodules in 2020 (i,j)
     for j=2:14
-        TP(10,1,j)=houses(1,j)-sum(TP(10,2:end,j)); % Calculation of plantnumbers of GasBW in market 2-14
+        TP(10,1,j)=houses(6,j)-sum(TP(10,2:end,j)); % Calculation of plantnumbers of GasBW in market 2-14
     end
     
-    % Market En30
+    % Sub-sector En30
     TP(10,7,1)=300; % Change plantnumber of WPel+PV
-    TP(10,6,1)=houses(1,1)-sum(TP(10,7:end,1)); % Correct plantnumbers of EDH+ST on market En30
+    TP(10,6,1)=houses(6,1)-sum(TP(10,7:end,1)); % Correct plantnumbers of EDH+ST on market En30
     
-    % Market district heating, according Excel Sheet own calculations
+    % Sub-sector district heating, according Excel Sheet own calculations
     TP(10,24,15)=1494; % Kohle-HKW
     TP(10,25,15)=2660; % GUD-Kraftwerk
     TP(10,26,15)=300; %HHS-KohleHKW
     TP(10,27,15)=0; % HT-WP + ST + BM-BHKW
     TP(10,28,15)=670; % MüllHKW+HHS-K
-    TP(10,29,15)=houses(1,15)-sum(TP(10,24:28,15)); % HHS-V-KWK: ~1069
+    TP(10,29,15)=houses(6,15)-sum(TP(10,24:28,15)); % HHS-V-KWK: ~1069
     
-    % Market Industry<200°
-    TP(10,30,16)=houses(1,16)-sum(TP(10,31:end,16)); % Correct plantnumbers of GasNT
+    % Sub-sector Industry<200°
+    TP(10,30,16)=houses(6,16)-sum(TP(10,31:end,16)); % Correct plantnumbers of GasNT
     
-    % Market Industry 200°-500°
-    TP(10,36,17)=houses(1,17)-sum(TP(10,[33 37:end],17)); % Correct plantnumbers of GasK
+    % Sub-sector Industry 200°-500°
+    TP(10,36,17)=houses(6,17)-sum(TP(10,[33 37:end],17)); % Correct plantnumbers of GasK
     
-    % Market Industry>500°
-    TP(10,40,18)=houses(1,18)-sum(TP(10,41:end,18)); % Correct plantnumbers of GasDirektF
+    % Sub-sector Industry>500°
+    TP(10,40,18)=houses(6,18)-sum(TP(10,41:end,18)); % Correct plantnumbers of GasDirektF
     
-    % BioCoke market (Assumption 2015: all CoalCoke)!
-    TP(10,46,19)=houses(1,19);
+    % BioCoke Sub-sector (Assumption 2020: all CoalCoke)!
+    TP(10,46,19)=houses(6,19);
 
     % Set data format for GAMS
     nstart.uels = {techs,markets};
@@ -681,6 +688,17 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
         end
     end
 
+%     NDEC(19,24,:,15)=nstart.val(24,15)-sum(NDEC(1:18,24,1,15));  % Kohleausstieg 2038
+%     % Decomission all starting plants in the final year of the modeling to
+%     % give the model a chance to reach the climate target
+%     for i=1:tech
+%         for m=1:modul
+%             for j=1:market
+%                 NDEC(time,i,m,j)=nstart.val(i,j)-sum(NDEC(1:time-1,i,m,j));
+%             end
+%         end
+%     end
+    
     
     % Correct, if not all or additional HS are decreases (caused by round)
     for j=1:market
@@ -758,8 +776,10 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     % Determine technology system ghg emissions for 2050 by reducing the infrastructure emissions by... 
     if strcmp(target,'80 %') || strcmp(target,'88 %')
         ghgInfra2050=0.35*ghgInfra2017; % ...65% for the 80% reduction scenario 
-    elseif strcmp(target,'95 %') || strcmp(target,'98 %') || strcmp(target,'No target')
+    elseif strcmp(target,'95 %') || strcmp(target,'No target')
         ghgInfra2050=0.2*ghgInfra2017; % ...80% for the 95% reduction scenario 
+    elseif strcmp(target,'97 % in 2045') || strcmp(target,'100 %')
+        ghgInfra2050=0*ghgInfra2017; % ...0% for the 97% reduction scenario 
     end
     
     % Add infrastructure emissions
@@ -774,7 +794,7 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     % Interpolate technology specific emissions from 2015-2050 [t/GJ]
     for i=1:tech
         for j=1:market
-            GHGR(1:36,i,j) = interp1([1 36],[ghg2017(i,j) ghg2050(i,j)],1:1:36,'linear');
+            GHGR(1:time,i,j) = interp1([1 time],[ghg2017(i,j) ghg2050(i,j)],1:1:time,'linear');
         end
     end
     
@@ -857,8 +877,10 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
         ghgtarget=ghg80BPW;
     elseif strcmp(target,'95 %')
         ghgtarget=ghg95;
-    elseif strcmp(target,'98 %')
-        ghgtarget=ghg95BPW;
+    elseif strcmp(target,'97 % in 2045')
+        ghgtarget=ghg95_2045;
+    elseif strcmp(target,'100 %')
+        ghgtarget=ghg100;
     elseif strcmp(target,'No target')
         ghgtarget=GHGMAX;
     end
@@ -866,7 +888,7 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     % calculate target if a target is set
     if strcmp(target,'No target')==0
     
-        load('Results/Temp.mat','bc'); % Feedstock emissions in 2015 are based on the last model run. Required to set a target!
+        load('Results/Temp.mat','bc'); % Feedstock emissions in 2020 are based on the last model run. Required to set a target!
 
         % Calculate total emissions in the first year based on previous optimization results for bioproduct choice, allocation factor applied to the complete heating system
         for j=1:market
@@ -880,11 +902,7 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
 
         %set emission target (ghgtarget is reduction compared to previous year [%])
         for t=2:time
-            if t<=40
-                GHGMAX(t)= GHGMAX(t-1)*(1-ghgtarget(t));
-            elseif t>40
-                GHGMAX(41:time)= GHGMAX(40);
-            end
+            GHGMAX(t)= GHGMAX(t-1)*(1-ghgtarget(t));
         end
     end
     
@@ -936,7 +954,7 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
                 end
                 %DelCharge(DelCharge==Inf)=0;
                 for b=1:bioprod
-                    if t<=36
+                    if t<=31
                         VC(t,i,j,b) = BP(t,b,j)*PMBIO(t,i,j)/EF(t,i,j)... % Feedstock price*Share of solid biomass/ Degree of efficiency 
                         + BP(t,b,j)*PMGAS(t,i,j)/EFGas(t,i,j)... % Gas/biogas/coal/waste Price * Gas Share / Degree of efficiency   
                         + PfromNet(i,j)*0.0036*PowerPrice(t,j)/DCAP(t,j)...  % costs for electricity demand
@@ -961,7 +979,7 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
                         end
                             
                         
-                    elseif t>36
+                    elseif t>31
                         VC(t,i,j,b)=VC(36,i,j,b); % if timespan is increased, variable costs remain on the the level of 2050
                     end
                 end
@@ -982,6 +1000,22 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     
     % Price increase for Coalcoke (+90%)
     VC(:,46,19,25)=VC(:,46,19,25)+CoalPrice(1,:)'*0.9;
+    
+    % Substract the taxes for the feedstock to avoid double taxing and add biomethane taxes and levies on the feedstock costs of HPR and GobiGas
+    for b=[1 3 4 17]
+        for i= 57:58
+            % 19% for wood chips
+            if b==1
+                VC(:,i,18,b) = VC(:,i,18,b) - 0.19*BP(:,b,18).*PMBIO(:,i,18)./EF(:,i,18);
+            end
+            % 7% for pellets
+            if b==3 || b==4 || b==17
+                VC(:,i,18,b) = VC(:,i,18,b) - 0.07*BP(:,b,18).*PMBIO(:,i,18)./EF(:,i,18);
+            end
+            % Final taxes and levies
+            VC(:,i,18,b) = VC(:,i,18,b) + (BP(:,b,18).*squeeze(PMBIO(:,i,18)./EF(:,i,18)))*(1/BiogasFactor(18,1)-1);
+        end
+    end
     
     % Set data format for GAMS
     VC(isnan(VC))=0; % replaces NaN with zero

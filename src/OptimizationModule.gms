@@ -26,7 +26,7 @@ sets
 
  t               Time
 $loadR t
- t2034(t)        Time before 2035 /1*20/
+ t2034(t)        Time before 2035 /1*15/
 
  i               Technologies
 $loadR i
@@ -93,7 +93,7 @@ parameters
  dcap(t,j)       Heat demand per house or HS [GJ]
  nstart(i,j)     Initial stock of HS
  nsdec(t,i,m,j)  Yearly decrease of initial stock of HS
- culstart(b)     Crop cultivation portfolio in the first 5 years
+ culstart(b)     Crop cultivation portfolio in the first 5 years [ha]
  vcBeh(t,i,j,c)  Intangible variable costs [EUR:GJ]
  invBeh(t,i,j,c) Intangible investment costs [EUR]
  dBeh(t,j,c)     Demand in the clusters [GJ]
@@ -213,9 +213,9 @@ ba1fct           Which residue biomass types can be used for which biomass produ
 ba2fct           Limitation of energy crops land potential to biomass products
 ba3fct           Which fossil biomass types can be used for which biomass products
 
-bufct            Produced amount biomass products = sum of consumed biomass per technologies
+bufct            Produced amount of biomass products = sum of consumed biomass over the technologies
 
-bustart          set portfolio of energy crops in starting years
+bustart          set portfolio of digestible energy crops in starting years
 bustartKup       set portfolio of KUP in starting years
 bustartMis       set portfolio of Miscanthus in the starting years
 bumax            max increase of energy crops
@@ -242,18 +242,19 @@ totghgfct..              ghgtot=e=sum((t,i,j,b),ghgf(t,i,j,b))+sum((t,i,j),ghgt(
 demandfct(t,j)..                                                 d(t,j)=e=sum((i),v(t,i,j));
 dcapfct(t,j)..                                                   d(t,j)=e=sum(i,nprod(t,i,j))*dcap(t,j);
 
-nfct(t+1,i,m,j) $ (ord(t)<36)..                                  ncap(t+1,i,m,j)=e=ncap(t,i,m,j)+next(t+1,i,m,j)-ndec(t+1,i,m,j);
+nfct(t+1,i,m,j) $ (ord(t)<31)..                                  ncap(t+1,i,m,j)=e=ncap(t,i,m,j)+next(t+1,i,m,j)-ndec(t+1,i,m,j);
 
 ncapfct(t,i,m,j)..                                               ncap(t,i,m,j)=e=ncap1(t,i,m,j)+ncap2(t,i,m,j);
 ncap2fct(t,i,m,j) $ (ord(t)>1)..                                 ncap2(t,i,m,j)=e=ncap(t,i,m,j)-nprod(t,i,j);
-ncap3fct(t+1,i,j) $ (ord(t)<36)..                                ncap2(t+1,i,"1",j)=g=ncap2(t,i,"1",j)-nsdec(t+1,i,"1",j)-nxdec(t+1,i,"1",j);
+ncap3fct(t+1,i,j) $ (ord(t)<31)..                                ncap2(t+1,i,"1",j)=g=ncap2(t,i,"1",j)-nsdec(t+1,i,"1",j)-nxdec(t+1,i,"1",j);
 ncap2ctrl1(t)..                                                  sum((i,j),ncap2(t,i,"1",j))=l=0.01*sum((i,j),nprod(t,i,j));
 
 ndecfct(t,i,m,j) $ (ord(t)>1)..                                  ndec(t,i,m,j)=e=nsdec(t,i,m,j)+nxdec(t,i,m,j);
-nxdec1fct(t,i,m,j) $ (ord(t)+life(i,m,j)<37) ..                  nxdec(t+life(i,m,j),i,m,j)=e=next(t,i,m,j);
+nxdec1fct(t,i,m,j) $ (ord(t)+life(i,m,j)<32) ..                  nxdec(t+life(i,m,j),i,m,j)=e=next(t,i,m,j);
 
 nocfct(t,i,m,j)..                                                nprod(t,i,j)=l=ncap1(t,i,m,j);
 n1fct(t,i,m,j)..                                                 nprod(t,i,j)=e=ncap1(t,i,"1",j);
+
 mbioprodfct(t,i,j)..                                             nprod(t,i,j)*pmBio(t,i,j)*dcap(t,j)=e=sum(b,vBio(t,i,j,b));
 mgasprodfct(t,i,j)..                                             nprod(t,i,j)*pmGas(t,i,j)*dcap(t,j)=e=sum(b,vGas(t,i,j,b));
 m3prodfct(t,i,j)..                                               nprod(t,i,j)*pm3(t,i,j)*dcap(t,j)=e=v3(t,i,j);
@@ -267,16 +268,17 @@ bamaxwastefct(t)..                                               sum(bmwaste(bm)
 
 ba1fct(t,bmwaste)..                                              ba(t,bmwaste)=g=sum(b,bu(t,b,bmwaste));
 ba2fct(t)..                                                      ba(t,"13")*bamaxc(t)=g=sum(bcult(b),bu(t,b,"13")/yield(t,b));
-ba3fct(t)..                                                      ba(t,"14")=g=sum(b,bu(t,b,"13"));
+ba3fct(t)..                                                      ba(t,"14")=g=sum(b,bu(t,b,"14"));
 
 bufct(t,b)..                                                     sum(bm,bu(t,b,bm))=e=sum((i,j),bc(t,i,j,b));
 
 bustart(bculst)..                                                bu("1",bculst,"13")=e=yield("1",bculst)*culstart(bculst);
 bustartKup..                                                     sum((bkup,bm),bu("1",bkup,bm))=e=yield("1","12")*culstart("12");
 bustartMis..                                                     sum((bmis,bm),bu("1",bmis,bm))=e=yield("1","15")*culstart("15");
-bumax(t+1,bculst) $ (ord(t)<36)..                                bu(t+1,bculst,"13")=l=2*bu(t,bculst,"13");
-bumaxKup(t+1) $ (ord(t)<36)..                                    sum(bkup,bu(t+1,bkup,"13"))=l=2*sum(bkup,bu(t,bkup,"13"));
-bumaxMis(t+1) $ (ord(t)<36)..                                    sum(bmis,bu(t+1,bmis,"13"))=l=2*sum(bmis,bu(t,bmis,"13"));
+
+bumax(t+1,bculst) $ (ord(t)<31)..                                bu(t+1,bculst,"13")=l=2*bu(t,bculst,"13");
+bumaxKup(t+1) $ (ord(t)<31)..                                    sum(bkup,bu(t+1,bkup,"13"))=l=2*sum(bkup,bu(t,bkup,"13"));
+bumaxMis(t+1) $ (ord(t)<31)..                                    sum(bmis,bu(t+1,bmis,"13"))=l=2*sum(bmis,bu(t,bmis,"13"));
 
 ghgffct(t,i,j,b)..                                               ghgf(t,i,j,b)=e=alloc(i,j)*ghgfeed(b)*bc(t,i,j,b);
 ghgtfct(t,i,j)..                                                 ghgt(t,i,j)=e=alloc(i,j)*ghgr(t,i,j)*v(t,i,j);

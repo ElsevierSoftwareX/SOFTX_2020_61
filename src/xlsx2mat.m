@@ -33,11 +33,11 @@ save('SetList.mat','SetList');
 market = find(cellfun(@isempty,SetList.textdata.SetList(:,13))==1,1)-2; % j
 [~,sheets] = xlsfinfo('TechData_FinalData.xlsx');
 for j=1:market
-    TP(:,:,j) = xlsread('TechData_FinalData.xlsx',sheets{j},'C3:BF38');
+    TP(:,:,j) = xlsread('TechData_FinalData.xlsx',sheets{j},'C3:BH38');
 end
 
 %GHG data
-[~,~,THGRAW]=xlsread('TechData_GHGRAW.xlsx','HaushalteIndustrie','A7:Q56');
+[~,~,THGRAW]=xlsread('TechData_GHGRAW.xlsx','HaushalteIndustrie','A7:Q57');
 THGFeed=xlsread('TechData_GHGRAW.xlsx','Brennstoff','H9:H36');
 save('TechData.mat','TP','THGRAW','THGFeed','-append');
 
@@ -54,8 +54,8 @@ save('BiomassData.mat','BAMinMaxData','-append');
 BioResiduesCosts=xlsread('Biomass_Data','CostsBioProductsResidues','D2:F12');
 save('BiomassData.mat','BioResiduesCosts','-append');
 
-% Portfolio of cultivation in first 5 years
-CULSTART=xlsread('Biomass_Data','CulStart','B3:X7');
+% Portfolio of cultivation in 2019
+CULSTART=xlsread('Biomass_Data','CulStart','B8:AC8');
 save('BiomassData.mat','CULSTART','-append');
 
 % Yield energy crops
