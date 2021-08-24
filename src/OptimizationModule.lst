@@ -1,4 +1,4 @@
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 1
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -23,7 +23,7 @@ C o m p i l a t i o n
   18  *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   19   
   21   
-GDXIN   C:\Users\martinm\Documents\BENOPT-HEAT (public)\src\matdata.gdx
+GDXIN   C:\Users\martinm\Documents\BENOPT-HEAT (SmartWirbelschicht)\src\matdata.gdx
   23   
   24  sets
   25   stat            Solve status /solvestat,modelstat/
@@ -49,14 +49,14 @@ GDXIN   C:\Users\martinm\Documents\BENOPT-HEAT (public)\src\matdata.gdx
   45   
   46   bm              Biotype
 --- LOAD  bm = 6:bm
-  48   bmwaste(bm)     Biotype residues /1*11/
+  48   bmwaste(bm)     Biotype residues /1*12/
   49   
   50   b               Bioproduct
 --- LOAD  b = 7:b
-  52   bwaste(b)       Bioproduct residues /1*9/
+  52   bwaste(b)       Bioproduct residues /1*9,27,28/
   53   bcult(b)        Bioproduct cultivation /10*23/
   54   bkup(b)         SRC products /12*14/
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 2
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -114,7 +114,7 @@ C o m p i l a t i o n
  105   v3p(t,i,j)       Non-Biomass heat production [GJ]
  106   bup(t,b,bm)      Actual converted biomass from biotype to bioprod [GJ]
  107   bcp(t,i,j,b)     Actual consumed biomass in the technology [GJ]
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 3
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 3
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -172,7 +172,7 @@ C o m p i l a t i o n
  134   bc(t,i,j,b)     Actual consumed biomass in the technology [GJ]
  135   ghgf(t,i,j,b)   Actual feedstock GHG emissions [t]
  136   ghgt(t,i,j)     Actual technology GHG emissions [t]
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 4
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 4
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -230,7 +230,7 @@ C o m p i l a t i o n
  187  demandfct        Heat demand per market = sum of heat consumption per market
  188  dcapfct          This equation is supposed to tell that one HS is exactly for one house
  189   
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 5
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 5
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -288,7 +288,7 @@ C o m p i l a t i o n
  239  totghgfct..              ghgtot=e=sum((t,i,j,b),ghgf(t,i,j,b))+sum((t,i,j),ghgt(t,i,j));
  240   
  241  * Restrictions
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 6
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 6
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -320,17 +320,17 @@ C o m p i l a t i o n
  266  bamaxwastefct(t)..                                               sum(bmwaste(bm),ba(t,bm))*bamaxw(t)=g=sum((i,j,bwaste(b)),bc(t,i,j,b));
  267   
  268  ba1fct(t,bmwaste)..                                              ba(t,bmwaste)=g=sum(b,bu(t,b,bmwaste));
- 269  ba2fct(t)..                                                      ba(t,"12")*bamaxc(t)=g=sum(bcult(b),bu(t,b,"12")/yield(t,b));
- 270  ba3fct(t)..                                                      ba(t,"13")=g=sum(b,bu(t,b,"13"));
+ 269  ba2fct(t)..                                                      ba(t,"13")*bamaxc(t)=g=sum(bcult(b),bu(t,b,"13")/yield(t,b));
+ 270  ba3fct(t)..                                                      ba(t,"14")=g=sum(b,bu(t,b,"13"));
  271   
  272  bufct(t,b)..                                                     sum(bm,bu(t,b,bm))=e=sum((i,j),bc(t,i,j,b));
  273   
- 274  bustart(bculst)..                                                bu("1",bculst,"12")=e=yield("1",bculst)*culstart(bculst);
+ 274  bustart(bculst)..                                                bu("1",bculst,"13")=e=yield("1",bculst)*culstart(bculst);
  275  bustartKup..                                                     sum((bkup,bm),bu("1",bkup,bm))=e=yield("1","12")*culstart("12");
  276  bustartMis..                                                     sum((bmis,bm),bu("1",bmis,bm))=e=yield("1","15")*culstart("15");
- 277  bumax(t+1,bculst) $ (ord(t)<36)..                                bu(t+1,bculst,"12")=l=2*bu(t,bculst,"12");
- 278  bumaxKup(t+1) $ (ord(t)<36)..                                    sum(bkup,bu(t+1,bkup,"12"))=l=2*sum(bkup,bu(t,bkup,"12"));
- 279  bumaxMis(t+1) $ (ord(t)<36)..                                    sum(bmis,bu(t+1,bmis,"12"))=l=2*sum(bmis,bu(t,bmis,"12"));
+ 277  bumax(t+1,bculst) $ (ord(t)<36)..                                bu(t+1,bculst,"13")=l=2*bu(t,bculst,"13");
+ 278  bumaxKup(t+1) $ (ord(t)<36)..                                    sum(bkup,bu(t+1,bkup,"13"))=l=2*sum(bkup,bu(t,bkup,"13"));
+ 279  bumaxMis(t+1) $ (ord(t)<36)..                                    sum(bmis,bu(t+1,bmis,"13"))=l=2*sum(bmis,bu(t,bmis,"13"));
  280   
  281  ghgffct(t,i,j,b)..                                               ghgf(t,i,j,b)=e=alloc(i,j)*ghgfeed(b)*bc(t,i,j,b);
  282  ghgtfct(t,i,j)..                                                 ghgt(t,i,j)=e=alloc(i,j)*ghgr(t,i,j)*v(t,i,j);
@@ -346,7 +346,7 @@ C o m p i l a t i o n
  292   
  293  model BensimHeat /all/;
  294   
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 7
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 7
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -404,7 +404,7 @@ C o m p i l a t i o n
  345  ncap2p(t,i,m,j) = ncap2.l(t,i,m,j);
  346  nextp(t,i,m,j) = next.l(t,i,m,j);
  347  nxdecp(t,i,m,j) = nxdec.l(t,i,m,j);
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 8
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 8
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -414,35 +414,35 @@ C o m p i l a t i o n
  350   
  351  execute_unload 'matsol.gdx', returnstat ;
  352  execute_unloadIdx 'idxdata', vp, vBiop, vGasp, v3p, ghgfp, ghgtp, bup, bcp, ncapp, ncap1p, ncap2p, nextp, nprodp, nxdecp, vBehp, tcp;
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               07/06/20 11:11:08 Page 9
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                               04/12/21 16:04:54 Page 9
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Include File Summary
 
 
    SEQ   GLOBAL TYPE      PARENT   LOCAL  FILENAME
 
-     1        1 INPUT          0       0  C:\Users\martinm\Documents\BENOPT-HEAT (public)\src\OptimizationModule.gms
-     2       22 GDXIN          1      22  C:\Users\martinm\Documents\BENOPT-HEAT (public)\src\matdata.gdx
+     1        1 INPUT          0       0  C:\Users\martinm\Documents\BENOPT-HEAT (SmartWirbelschicht)\src\OptimizationModule.gms
+     2       22 GDXIN          1      22  C:\Users\martinm\Documents\BENOPT-HEAT (SmartWirbelschicht)\src\matdata.gdx
 
 
-COMPILATION TIME     =        0.047 SECONDS     13 MB  28.2.0 r750fa45 WEX-WEI
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                              07/06/20 11:11:08 Page 10
+COMPILATION TIME     =        0.172 SECONDS     38 MB  28.2.0 r750fa45 WEX-WEI
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                              04/12/21 16:04:54 Page 10
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Model Statistics    SOLVE BensimHeat Using LP From line 328
 
 
 MODEL STATISTICS
 
-BLOCKS OF EQUATIONS          39     SINGLE EQUATIONS    3,319,098
-BLOCKS OF VARIABLES          19     SINGLE VARIABLES    4,970,182
-NON ZERO ELEMENTS    15,171,105
+BLOCKS OF EQUATIONS          39     SINGLE EQUATIONS    3,972,684
+BLOCKS OF VARIABLES          17     SINGLE VARIABLES    6,044,337
+NON ZERO ELEMENTS    20,033,953
 
 
-GENERATION TIME      =       15.750 SECONDS  1,510 MB  28.2.0 r750fa45 WEX-WEI
+GENERATION TIME      =       17.375 SECONDS  1,944 MB  28.2.0 r750fa45 WEX-WEI
 
 
-EXECUTION TIME       =       15.937 SECONDS  1,510 MB  28.2.0 r750fa45 WEX-WEI
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                              07/06/20 11:11:08 Page 11
+EXECUTION TIME       =       17.672 SECONDS  1,944 MB  28.2.0 r750fa45 WEX-WEI
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                              04/12/21 16:04:54 Page 11
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Solution Report     SOLVE BensimHeat Using LP From line 328
 
@@ -455,34 +455,34 @@ Solution Report     SOLVE BensimHeat Using LP From line 328
 
 **** SOLVER STATUS     1 Normal Completion         
 **** MODEL STATUS      1 Optimal                   
-**** OBJECTIVE VALUE    3485625353117.8857
+**** OBJECTIVE VALUE    3205019275454.9531
 
- RESOURCE USAGE, LIMIT         41.578     45000.000
- ITERATION COUNT, LIMIT     33897    2000000000
+ RESOURCE USAGE, LIMIT         39.391     45000.000
+ ITERATION COUNT, LIMIT     34452    2000000000
 
 IBM ILOG CPLEX   28.2.0 r750fa45 Released Aug 19, 2019 WEI x86 64bit/MS Window
 --- GAMS/Cplex licensed for continuous and discrete problems.
 Cplex 12.9.0.0
 
-Space for names approximately 199.31 Mb
+Space for names approximately 240.95 Mb
 Use option 'names no' to turn use of names off
 LP status(1): optimal
-Cplex Time: 30.11sec (det. 13171.01 ticks)
+Cplex Time: 26.53sec (det. 10140.59 ticks)
 Optimal solution found.
-Objective : 3485625353117.885742
+Objective : 3205019275454.953125
 
 
 
 **** REPORT SUMMARY :        0     NONOPT
                              0 INFEASIBLE
                              0  UNBOUNDED
-                         11590  PROJECTED
-GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                              07/06/20 11:11:08 Page 12
+                         19896  PROJECTED
+GAMS 28.2.0  r750fa45 Released Aug 19, 2019 WEX-WEI x86 64bit/MS Windows                                                                                                                                                              04/12/21 16:04:54 Page 12
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 E x e c u t i o n
 
 
-EXECUTION TIME       =        1.406 SECONDS    628 MB  28.2.0 r750fa45 WEX-WEI
+EXECUTION TIME       =        1.859 SECONDS    781 MB  28.2.0 r750fa45 WEX-WEI
 
 
 USER: Small MUD - 5 User License                     S191010/0001AO-WIN
@@ -492,5 +492,5 @@ USER: Small MUD - 5 User License                     S191010/0001AO-WIN
 
 **** FILE SUMMARY
 
-Input      C:\Users\martinm\Documents\BENOPT-HEAT (public)\src\OptimizationModule.gms
-Output     C:\Users\martinm\Documents\BENOPT-HEAT (public)\src\OptimizationModule.lst
+Input      C:\Users\martinm\Documents\BENOPT-HEAT (SmartWirbelschicht)\src\OptimizationModule.gms
+Output     C:\Users\martinm\Documents\BENOPT-HEAT (SmartWirbelschicht)\src\OptimizationModule.lst

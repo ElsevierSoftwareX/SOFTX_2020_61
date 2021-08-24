@@ -348,41 +348,41 @@ if fig4==1
         % Subplot biomass residues available
         subplot(3,2,[1 2]);
         hold on
-        h=area(ba.val(:,1:11)/1000000);
+        h=area(ba.val(:,1:12)/1000000);
         xlim([0 time+1])
-        ylim([0 max(sum(ba.val(:,1:11)/1000000,2))+100])
+        ylim([0 max(sum(ba.val(:,1:12)/1000000,2))+100])
         ax=gca;
         ax.XTick = 1:5:36;
         ax.XTickLabel=2015:5:2050;
         ax.FontSize=FT(4);
         title(title1fig3,'FontSize',FT(1));
         ylabel(ylabbiomass,'FontSize',FT(2));
-        legend(h(end:-1:1),legbiotype(11:-1:1),'Location','bestoutside','FontSize',FT(3));
+        legend(h(end:-1:1),legbiotype(12:-1:1),'Location','bestoutside','FontSize',FT(3));
         hold off
     
         %Subplot biomass residues consumed
         subplot(3,2,[3 4]);
         hold on
-        h=area(squeeze(sum(bu(:,:,1:11),2)/1000000));
-        h2=plot(sum(ba.val(:,1:11),2)/1000000);
-        h3=plot(sum(ba.val(:,1:11),2).*bamaxw.val(:)/1000000);
+        h=area(squeeze(sum(bu(:,:,1:12),2)/1000000));
+        h2=plot(sum(ba.val(:,1:12),2)/1000000);
+        h3=plot(sum(ba.val(:,1:12),2).*bamaxw.val(:)/1000000);
         xlim([0 time+1])
-        ylim([0 max(sum(ba.val(:,1:11)/1000000,2))+100])
+        ylim([0 max(sum(ba.val(:,1:12)/1000000,2))+100])
         ax=gca;
         ax.XTick = [1 6:10:36];
         ax.XTickLabel=[2015 2020:10:2050];
         ax.FontSize=FT(4);
         title(title2fig3,'FontSize',FT(1));
         ylabel(ylabbiomass,'FontSize',FT(2));
-        legend([h2 h3 h(end:-1:1)],{legfig3add1,legfig3add2,legbiotype{11:-1:1}},'Location','bestoutside','FontSize',FT(3));
+        legend([h2 h3 h(end:-1:1)],{legfig3add1,legfig3add2,legbiotype{12:-1:1}},'Location','bestoutside','FontSize',FT(3));
         hold off
 
         % Subplot cultivation
         subplot(3,2,[5 6])
         hold on
-        plot(ba.val(:,12)/1000000)
-        plot(ba.val(:,12).*bamaxc.val(:)/1000000)
-        plot(squeeze(sum(squeeze(bu(:,:,12))./yield.val(:,:),2,'omitnan')/(1000000)),'--','color','black')
+        plot(ba.val(:,13)/1000000)
+        plot(ba.val(:,13).*bamaxc.val(:)/1000000)
+        plot(squeeze(sum(squeeze(bu(:,:,13))./yield.val(:,:),2,'omitnan')/(1000000)),'--','color','black')
         xlim([0 time+1])
         ax=gca;
         ax.XTick = [1 6:10:36];
@@ -413,8 +413,8 @@ if fig5==1
 
     % Biomass distribution over biomass products
     subplot(2,1,2)
-    h=area(squeeze(sum(sum(bc(:,:,:,1:23),2),3))/1000000);
-    for b=1:20
+    h=area(squeeze(sum(sum(bc(:,:,:,[1:23 27 28]),2),3))/1000000);
+    for b=1:25
             h(b).FaceColor=colbioprod{b};
     end
     xlim([0 time+1])
@@ -424,7 +424,7 @@ if fig5==1
     ax.FontSize=FT(4);
     title(title2fig31,'FontSize',FT(1));
     ylabel(ylabbiomass,'FontSize',FT(2));
-    legend(h(end:-1:1),legbioprod(23:-1:1),'Location','bestoutside','FontSize',FT(3)); 
+    legend(h(end:-1:1),legbioprod([28 27 23:-1:1]),'Location','bestoutside','FontSize',FT(3)); 
 end
 
 %% Biomass use in technologies

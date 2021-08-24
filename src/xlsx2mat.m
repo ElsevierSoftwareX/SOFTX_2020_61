@@ -33,12 +33,12 @@ save('SetList.mat','SetList');
 market = find(cellfun(@isempty,SetList.textdata.SetList(:,13))==1,1)-2; % j
 [~,sheets] = xlsfinfo('TechData_FinalData.xlsx');
 for j=1:market
-    TP(:,:,j) = xlsread('TechData_FinalData.xlsx',sheets{j});
+    TP(:,:,j) = xlsread('TechData_FinalData.xlsx',sheets{j},'C3:BF38');
 end
 
 %GHG data
-[~,~,THGRAW]=xlsread('TechData_GHGRAW.xlsx','HaushalteIndustrie','A7:Q51');
-THGFeed=xlsread('TechData_GHGRAW.xlsx','Brennstoff','H9:H34');
+[~,~,THGRAW]=xlsread('TechData_GHGRAW.xlsx','HaushalteIndustrie','A7:Q56');
+THGFeed=xlsread('TechData_GHGRAW.xlsx','Brennstoff','H9:H36');
 save('TechData.mat','TP','THGRAW','THGFeed','-append');
 
 %% Biomass data
@@ -47,11 +47,11 @@ BAdata=xlsread('Biomass_Data','Potentials');
 save('BiomassData.mat','BAdata','-append');
 
 % Biomass potentialsMinMax
-BAMinMaxData=xlsread('Biomass_Data','PotentialMinMax','C2:F32');
+BAMinMaxData=xlsread('Biomass_Data','PotentialMinMax','C2:F34');
 save('BiomassData.mat','BAMinMaxData','-append');
 
 % CostsBioProductsResidues [€/GJ]
-BioResiduesCosts=xlsread('Biomass_Data','CostsBioProductsResidues','D2:F10');
+BioResiduesCosts=xlsread('Biomass_Data','CostsBioProductsResidues','D2:F12');
 save('BiomassData.mat','BioResiduesCosts','-append');
 
 % Portfolio of cultivation in first 5 years

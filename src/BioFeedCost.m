@@ -97,6 +97,10 @@ function[BP]=BioFeedCost(time,bioprod,priceDevFactor,feedstockInputData,BioResid
                 BP(t,b)=BioResiduesCosts(b,1)*(1+priceDevFactor)^(t-1);
             end
         end
+        for t=1:time
+            BP(t,27)=BioResiduesCosts(10,1)*(1+priceDevFactor)^(t-1);
+            BP(t,28)=BioResiduesCosts(11,1)*(1+priceDevFactor)^(t-1);
+        end
     else
         for b=[1:4 7]            
             for t=1:time

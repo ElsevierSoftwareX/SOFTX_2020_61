@@ -58,29 +58,29 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
         
     % Biomass potential for residues
     if residues==1 % Min
-        for bm=1:11
+        for bm=1:12
             BA(bm,:) = interp1(BAMinMaxData(1,:),BAMinMaxData(bm+3,:),2015:1:2050,'pchip');
         end
     elseif residues==2 % Medium
-        for bm=1:11
-            BA(bm,:) = interp1(BAMinMaxData(1,:),(BAMinMaxData(bm+3,:)+BAMinMaxData(bm+20,:))/2,2015:1:2050,'pchip');
+        for bm=1:12
+            BA(bm,:) = interp1(BAMinMaxData(1,:),(BAMinMaxData(bm+3,:)+BAMinMaxData(bm+21,:))/2,2015:1:2050,'pchip');
         end        
     elseif residues==3 % Max
-        for bm=1:11
-            BA(bm,:) = interp1(BAMinMaxData(1,:),BAMinMaxData(bm+20,:),2015:1:2050,'pchip');
+        for bm=1:12
+            BA(bm,:) = interp1(BAMinMaxData(1,:),BAMinMaxData(bm+21,:),2015:1:2050,'pchip');
         end
     elseif residues==5 % Sensitivity
         for bm=[1:5 7] % Wood
-            BA(bm,:) = interp1(BAMinMaxData(1,:),(BAMinMaxData(bm+3,:)+(BAMinMaxData(bm+20,:)-BAMinMaxData(bm+3,:))*Sen(1,32)),2015:1:2050,'pchip');
+            BA(bm,:) = interp1(BAMinMaxData(1,:),(BAMinMaxData(bm+3,:)+(BAMinMaxData(bm+21,:)-BAMinMaxData(bm+3,:))*Sen(1,32)),2015:1:2050,'pchip');
         end
-        for bm=[6 8 9] % Waste wood etc.
-            BA(bm,:) = interp1(BAMinMaxData(1,:),(BAMinMaxData(bm+3,:)+(BAMinMaxData(bm+20,:)-BAMinMaxData(bm+3,:))*Sen(1,33)),2015:1:2050,'pchip');
+        for bm=[6 8 9 10] % Waste wood etc.
+            BA(bm,:) = interp1(BAMinMaxData(1,:),(BAMinMaxData(bm+3,:)+(BAMinMaxData(bm+21,:)-BAMinMaxData(bm+3,:))*Sen(1,33)),2015:1:2050,'pchip');
         end
-        for bm=11 % Digestable
-            BA(bm,:) = interp1(BAMinMaxData(1,:),(BAMinMaxData(bm+3,:)+(BAMinMaxData(bm+20,:)-BAMinMaxData(bm+3,:))*Sen(1,34)),2015:1:2050,'pchip');
+        for bm=12 % Digestable
+            BA(bm,:) = interp1(BAMinMaxData(1,:),(BAMinMaxData(bm+3,:)+(BAMinMaxData(bm+21,:)-BAMinMaxData(bm+3,:))*Sen(1,34)),2015:1:2050,'pchip');
         end
-        for bm=10 % Straw
-            BA(bm,:) = interp1(BAMinMaxData(1,:),(BAMinMaxData(bm+3,:)+(BAMinMaxData(bm+20,:)-BAMinMaxData(bm+3,:))*Sen(1,35)),2015:1:2050,'pchip');
+        for bm=11 % Straw
+            BA(bm,:) = interp1(BAMinMaxData(1,:),(BAMinMaxData(bm+3,:)+(BAMinMaxData(bm+21,:)-BAMinMaxData(bm+3,:))*Sen(1,35)),2015:1:2050,'pchip');
         end
     end
     
@@ -121,15 +121,15 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     
     % Potential available land for energy crops
     if crop==1
-        BA(12,:) = interp1(BAdata(1,:),BAdata(8,:),2015:1:2050,'pchip');
+        BA(13,:) = interp1(BAdata(1,:),BAdata(8,:),2015:1:2050,'pchip');
     elseif crop==5 %Sensitivity
-        BA(12,:) = interp1(BAdata(1,:),BAdata(9,:)+(BAdata(8,:)-BAdata(9,:))*Sen(1,31),2015:1:2050,'pchip');
+        BA(13,:) = interp1(BAdata(1,:),BAdata(9,:)+(BAdata(8,:)-BAdata(9,:))*Sen(1,31),2015:1:2050,'pchip');
     else
-        BA(12,:) = interp1(BAdata(1,:),BAdata(9,:),2015:1:2050,'pchip');
+        BA(13,:) = interp1(BAdata(1,:),BAdata(9,:),2015:1:2050,'pchip');
     end
     
     % Set fossil potential to 20.000 PJ (equals unlimited)
-    BA(13,:)= 20*10^9;
+    BA(14,:)= 20*10^9;
     
     % Set data format for GAMS
     ba.uels = {tims,biotypes};
@@ -371,8 +371,8 @@ function[d,dcap,vc,inv,pmBio,pmGas,pm3,efBio,efGas,efMethan,life,ba,bamaxw,bamax
     
     %% Yields of the energy crops (t,b) [GJ/ha)
 
-    Y11=[0 0 0 0 0 0 0 0 0 YD(1,1) YD(1,2) YD(1,4) YD(1,4) YD(1,4) YD(1,6) YD(1,6) YD(1,6) YD(1,8) YD(1,9) YD(1,11) YD(1,10) YD(1,12) YD(1,13) 0 0 0];
-    Y50=[0 0 0 0 0 0 0 0 0 YD(2,1) YD(2,2) YD(2,4) YD(2,4) YD(2,4) YD(2,6) YD(2,6) YD(2,6) YD(2,8) YD(2,9) YD(2,11) YD(2,10) YD(2,12) YD(2,13) 0 0 0];
+    Y11=[0 0 0 0 0 0 0 0 0 YD(1,1) YD(1,2) YD(1,4) YD(1,4) YD(1,4) YD(1,6) YD(1,6) YD(1,6) YD(1,8) YD(1,9) YD(1,11) YD(1,10) YD(1,12) YD(1,13) 0 0 0 0 0];
+    Y50=[0 0 0 0 0 0 0 0 0 YD(2,1) YD(2,2) YD(2,4) YD(2,4) YD(2,4) YD(2,6) YD(2,6) YD(2,6) YD(2,8) YD(2,9) YD(2,11) YD(2,10) YD(2,12) YD(2,13) 0 0 0 0 0];
     YIELD=zeros(time,bioprod);
     for b=1:bioprod
         YIELD(1:time,b)=interp1([2015 2050],[Y11(1,b) Y50(1,b)],2015:1:2050,'linear');

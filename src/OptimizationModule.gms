@@ -45,11 +45,11 @@ $loadR c
 
  bm              Biotype
 $loadR bm
- bmwaste(bm)     Biotype residues /1*11/
+ bmwaste(bm)     Biotype residues /1*12/
 
  b               Bioproduct
 $loadR b
- bwaste(b)       Bioproduct residues /1*9/
+ bwaste(b)       Bioproduct residues /1*9,27,28/
  bcult(b)        Bioproduct cultivation /10*23/
  bkup(b)         SRC products /12*14/
  bmis(b)         Miscanthus products /15*17/
@@ -266,17 +266,17 @@ bcHHSCoal(t,j)..                                                 sum(b,bc(t,"26"
 bamaxwastefct(t)..                                               sum(bmwaste(bm),ba(t,bm))*bamaxw(t)=g=sum((i,j,bwaste(b)),bc(t,i,j,b));
 
 ba1fct(t,bmwaste)..                                              ba(t,bmwaste)=g=sum(b,bu(t,b,bmwaste));
-ba2fct(t)..                                                      ba(t,"12")*bamaxc(t)=g=sum(bcult(b),bu(t,b,"12")/yield(t,b));
-ba3fct(t)..                                                      ba(t,"13")=g=sum(b,bu(t,b,"13"));
+ba2fct(t)..                                                      ba(t,"13")*bamaxc(t)=g=sum(bcult(b),bu(t,b,"13")/yield(t,b));
+ba3fct(t)..                                                      ba(t,"14")=g=sum(b,bu(t,b,"13"));
 
 bufct(t,b)..                                                     sum(bm,bu(t,b,bm))=e=sum((i,j),bc(t,i,j,b));
 
-bustart(bculst)..                                                bu("1",bculst,"12")=e=yield("1",bculst)*culstart(bculst);
+bustart(bculst)..                                                bu("1",bculst,"13")=e=yield("1",bculst)*culstart(bculst);
 bustartKup..                                                     sum((bkup,bm),bu("1",bkup,bm))=e=yield("1","12")*culstart("12");
 bustartMis..                                                     sum((bmis,bm),bu("1",bmis,bm))=e=yield("1","15")*culstart("15");
-bumax(t+1,bculst) $ (ord(t)<36)..                                bu(t+1,bculst,"12")=l=2*bu(t,bculst,"12");
-bumaxKup(t+1) $ (ord(t)<36)..                                    sum(bkup,bu(t+1,bkup,"12"))=l=2*sum(bkup,bu(t,bkup,"12"));
-bumaxMis(t+1) $ (ord(t)<36)..                                    sum(bmis,bu(t+1,bmis,"12"))=l=2*sum(bmis,bu(t,bmis,"12"));
+bumax(t+1,bculst) $ (ord(t)<36)..                                bu(t+1,bculst,"13")=l=2*bu(t,bculst,"13");
+bumaxKup(t+1) $ (ord(t)<36)..                                    sum(bkup,bu(t+1,bkup,"13"))=l=2*sum(bkup,bu(t,bkup,"13"));
+bumaxMis(t+1) $ (ord(t)<36)..                                    sum(bmis,bu(t+1,bmis,"13"))=l=2*sum(bmis,bu(t,bmis,"13"));
 
 ghgffct(t,i,j,b)..                                               ghgf(t,i,j,b)=e=alloc(i,j)*ghgfeed(b)*bc(t,i,j,b);
 ghgtfct(t,i,j)..                                                 ghgt(t,i,j)=e=alloc(i,j)*ghgr(t,i,j)*v(t,i,j);
