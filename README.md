@@ -1,6 +1,7 @@
 # BENOPT-HEAT - Optimizing bioenergy use in the German heat sector
 
 The model was developed to identify the optimal use of biomass within the German heat sector. The heat sector is divided into 19 sub-sectors. For each sub-sector, a variety of representative bioenergy-, fossil- and other renewable (hybrid-) heat technology concepts are described, see data publication (https://data.mendeley.com/datasets/v2c93n28rj/2). Within scenarios, the optimal use of bioenergy is determined. A systematic uncertainty assessment can be conducted by applying a global sensitivity analysis. The model runs in Matlab and needs to be coupled with GAMS, where the actual optimization is conducted.
+For a detailed description of the model, have a look at the Wiki page.
 
 Running scenarios:
 ==================
@@ -15,7 +16,7 @@ Running a sensitivity analysis requires a model server grid or similar to execut
 - Calculate random samples (Sobol_LatinHypercubeSampling.m)
 - Import the range of possible price developments etc. based on a literature research (Sobol_ImportDataLimits.m)
 - Generate multiple optimization modules for parallel computing (Sobol_generate_gms_files.m)
-- Calculate N(k+2) optimization results (Sobol_Main.m), for a detailed description see https://doi.org/10.1016/j.apenergy.2020.114534
+- Calculate N(k+2) optimization results (Sobol_Main.m), for a detailed description see https://doi.org/10.1016/j.apenergy.2020.114534 
 - Calculate the Sobol' indices based on a defined model output (e.g. Sobol_IndexOnGHGReductionReached.m or Sobol_IndexOnBiomassConsumed.m or Sobol_IndexOnMarketShareTechTypes.m)
 - Further analysis can be conducted as e.g. scatter plots (Sobol_ScatterPlotsExample.m) or calculating a solution space (Sobol_SolutionSpaceExample.m)
 
